@@ -17,79 +17,122 @@ resources:
 
 ## Welcome!
 
-This presentation will show you examples of what you can do with Quarto and [Reveal.js](https://revealjs.com), including:
+**A few notes**
 
--   Presenting code and LaTeX equations
--   Including computations in slide output
--   Image, video, and iframe backgrounds
--   Fancy transitions and animations
--   Printing to PDF
+-   Slides are available online: <insert link>
+-   Email if there are specific tasks you want to be able to accomplish in R (kem81\@duke.edu)
+-   Some of these slides are adapted from:
+    -   [Thomas Mock's Intro to Tidyverse](https://www.youtube.com/watch?v=MKwyauo8nSI&ab_channel=ThomasMock)
+    -   [Garrett Grolemund's Remaster the Tidyverse Workshop](https://github.com/rstudio-education/remaster-the-tidyverse)
 
-...and much more
+## Introductions
 
-## Pretty Code {auto-animate="true"}
+-   Name
+-   Where are you from?
+-   Pick one:
+    -   Are you a morning person or a night person and why?
 
--   Over 20 syntax highlighting themes available
--   Default theme optimized for accessibility
+## Programming is a Learned Skill!
 
-``` r
-# Define a server for the Shiny app
-function(input, output) {
-  
-  # Fill in the spot we created for a plot
-  output$phonePlot <- renderPlot({
-    # Render a barplot
-  })
-}
+-   Practice & patience.
+-   Small wins turn into large success.
+-   Goal of the primer is to learn to use RStudio to explore data and get help when things don't work (it will happen often!)
+
+## Outline
+
+-   Introduction to R
+-   Introduction to Rstudio
+-   Transform Data
+-   Plot Data
+-   Model Data
+-   Other
+
+# Introduction to R
+
+## Introducing R
+
+-   Open-source programming language and software environment for statistical computing and graphics
+-   Created in 1996
+-   Created by **R**oss Ihaka and **R**obert Gentleman (University of Auckland, New Zealand)
+-   Currently supported by R Foundation for Statistical Computing (Vienna, Austria)
+-   More information on the history of R at https://www.R-project.org
+
+## Intro to R
+
+-   Math
+-   Assignments
+-   Functions
+-   Load and installing packages
+
+## Math with R
+
+```{r}
+#| echo: true
+5 + 7
 ```
 
-::: footer
-Learn more: [Syntax Highlighting](https://quarto.org/docs/output-formats/html-code.html#highlighting)
+```{r}
+#| echo: true
+3.14*3
+```
+
+## R is a functional language
+
+:::{.incremental}
+- Values: 3, "California", "2015-03-07"
+
+- Objects: x <- c(5/6, 0.83, 7)
+
+- Functions: round(x, digits = 3)
+  - round is the function here, a name without quotes
+  - followed by () to run the function
+  - digits = an argument of function
 :::
 
-## Code Animations {auto-animate="true"}
-
--   Over 20 syntax highlighting themes available
--   Default theme optimized for accessibility
-
-``` r
-# Define a server for the Shiny app
-function(input, output) {
-  
-  # Fill in the spot we created for a plot
-  output$phonePlot <- renderPlot({
-    # Render a barplot
-    barplot(WorldPhones[,input$region]*1000, 
-            main=input$region,
-            ylab="Number of Telephones",
-            xlab="Year")
-  })
-}
-```
-
-::: footer
-Learn more: [Code Animations](https://quarto.org/docs/presentations/revealjs/advanced.html#code-animations)
+::: notes
+possible homework about data structures:
+https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/
 :::
 
-## Line Highlighting
+## R is a functional language
 
--   Highlight specific lines for emphasis
--   Incrementally highlight additional lines
+![](images/f1.png)
 
-``` {.python code-line-numbers="4-5|7|10"}
-import numpy as np
-import matplotlib.pyplot as plt
-r = np.arange(0, 2, 0.01)
-theta = 2 * np.pi * r
-fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
-ax.plot(theta, r)
-ax.set_rticks([0.5, 1, 1.5, 2])
-ax.grid(True)
-plt.show()
-```
+## R is a functional language
 
-::: footer
-Learn more: [Line Highlighting](https://quarto.org/docs/presentations/revealjs/#line-highlighting)
+![](images/f2.png)
+
+## R is a functional language
+
+![](images/f3.png) 
+
+## R is a functional language
+
+![](images/f4.png)
+
+## Functions and packages
+
+# Introduction to RStudio
+
+## Intro to RStudio
+
+-   RStudio is an IDE (Integrated Development Environment)
+-   A place to write
+    -   Console
+    -   R Scripts
+    -   R Markdown
+    -   Code completion
+    -   Debugging
+-   A place to open things
+    -   File and path exploration
+    -   Open plots, data, R (.R) or R Markdown (.Rmd) files
+-   A place for projects
+    -   Self-contained structure
+    -   Consistent/easy pathing
+    -   Keep relevant files/code together with output
+
+::: notes
+Speaker notes go here.
 :::
 
 ## Executable Code
@@ -252,20 +295,6 @@ You can also use the following as a slide background:
 Learn more: [Media Backgrounds](https://quarto.org/docs/presentations/revealjs/#image-backgrounds)
 :::
 
-## Absolute Position
-
-Position images or other elements at precise locations
-
-![](mini/images/kitten-400-350.jpeg){.absolute top="170" left="30" width="400" height="400"}
-
-![](mini/images/kitten-450-250.jpeg){.absolute .fragment top="150" right="80" width="450"}
-
-![](mini/images/kitten-300-200.jpeg){.absolute .fragment bottom="110" right="130" width="300"}
-
-::: footer
-Learn more: [Absolute Position](https://quarto.org/docs/presentations/revealjs/advanced.html#absolute-position)
-:::
-
 ## Auto-Animate {auto-animate="true" auto-animate-easing="ease-in-out"}
 
 Automatically animate matching elements across slides with Auto-Animate.
@@ -309,7 +338,7 @@ Learn more: [Auto-Animate](https://quarto.org/docs/presentations/revealjs/advanc
 The next few slides will transition using the `slide` transition
 
 | Transition | Description                                                            |
-|------------|------------------------------------------------------------------------|
+|-----------------|-------------------------------------------------------|
 | `none`     | No transition (default, switch instantly)                              |
 | `fade`     | Cross fade                                                             |
 | `slide`    | Slide horizontally                                                     |
@@ -359,7 +388,6 @@ leaflet() %>%
 ::: footer
 Learn more: [Jupyter widgets](https://quarto.org/docs/interactive/widgets/jupyter.html), [htmlwidgets](https://quarto.org/docs/interactive/widgets/htmlwidgets.html)
 :::
-
 
 ## And More...
 
