@@ -29,10 +29,24 @@ resources:
 
 -   Name
 -   Where are you from?
--   Pick one:
-    -   Are you a morning person or a night person and why?
+-   Are you a morning person or a night person and why?
+
+## Setup
+
+1. Open RStudio.
+2. Open the Exercises.Rmd file in RStudio
+3. In the Console, type `install.packages("tidyverse")` and then Enter. 
+
+4. Run the first code chunk (the one that starts with `# load libraries`) in the .Rmd file by clicking on the green arrow at the top right of the chunk. 
+
 
 ## Programming is a Learned Skill!
+
+```{r}
+#| eval: false
+library(babynames)
+library(tidyverse)
+```
 
 -   Practice & patience.
 -   Small wins turn into large success.
@@ -66,8 +80,10 @@ resources:
 
 ## Math with R
 
+::: {style="font-size: 1.8em; text-align: center"}
 ```{r}
 #| echo: true
+# some math
 5 + 7
 ```
 
@@ -76,15 +92,22 @@ resources:
 3.14*3
 ```
 
+- Run code by highlighting code and then Cmd+Enter (for Mac) or Ctrl+Enter (for PC). 
+
+- In .Rmd files, can also run entire chunks with green arrow. 
+- Add comments with the `#`
+
+:::
+
 ## R is a functional language
 
 :::{.incremental}
 - Values: 3, "California", "2015-03-07"
 
-- Objects: x <- c(5/6, 0.83, 7)
-
-- Functions: round(x, digits = 3)
-  - round is the function here, a name without quotes
+- Objects: x <- [c(]{style="color:#cc0000"}5/6, 0.83, 7[)]{style="color:#cc0000"}
+  - To put multiple values into an object, use [c()]{style="color:#cc0000"}, stands for "combine"
+- Functions: [round]{style="color:#cc0000"}(x, digits = 3)
+  - name without quotes
   - followed by () to run the function
   - digits = an argument of function
 :::
@@ -94,308 +117,849 @@ possible homework about data structures:
 https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/
 :::
 
-## R is a functional language
+## Example
 
-![](images/f1.png)
+::: {style="font-size: 1.8em; text-align: center"}
+```{r}
+#| echo: true
+x <- c(7/8, 2.5434, 7)
 
-## R is a functional language
+round(x, digits = 3)
+```
+:::
 
-![](images/f2.png)
+## Example
 
-## R is a functional language
+Vectorization
 
-![](images/f3.png) 
+::: {style="font-size: 1.8em; text-align: center"}
+```{r}
+#| echo: true
+a <- c(1, 2, 3)
 
-## R is a functional language
+b <- c(3, 4, 5)
+```
 
-![](images/f4.png)
+```{r}
+#| echo: true
+a + b
+
+a * b
+```
+:::
+
+## R symbols
+
+::: columns
+::: {.column width="50%"}
+
+See
+
+- `<-`
+- `%>%`
+- `==`
+- `=`
+:::
+
+::: {.column width="50%"}
+
+Say
+
+- Gets
+- And then
+- Compare
+- Assign
+
+:::
+:::
+
+## Example
+
+::: {style="font-size: 1.8em; text-align: center"}
+```{r}
+#| echo: true
+c <- 1:5
+print(c)
+d <- c(0, 1, 7, 7, 7)
+print(d)
+c < d
+```
+:::
+
+# R Packages
 
 ## Functions and packages
 
+![](images/f5.png)
+## Functions and packages
+
+![](images/f6.png)
+::: notes
+An R package is a collection of functions, data, and documentation that extends the capabilities of base R.
+
+:::
 # Introduction to RStudio
 
 ## Intro to RStudio
+
+::: {style="font-size: 0.8em"}
 
 -   RStudio is an IDE (Integrated Development Environment)
 -   A place to write
     -   Console
     -   R Scripts
     -   R Markdown
-    -   Code completion
-    -   Debugging
 -   A place to open things
-    -   File and path exploration
     -   Open plots, data, R (.R) or R Markdown (.Rmd) files
 -   A place for projects
     -   Self-contained structure
     -   Consistent/easy pathing
     -   Keep relevant files/code together with output
 
+:::
+
 ::: notes
 Speaker notes go here.
 :::
 
-## Executable Code
+## RStudio Interface
+
+![](images/f4.png)
+
+# Tidyverse
+
+## Tidyverse
+
+
+::: {style="fig-width: 0.8em"}
+![](images/f8.png)
+:::
+
+
+
+::: notes
+Packages in the tidyverse share a common philosophy of data, and are designed to work together naturally. 
+
+make figure smaller!
+:::
+
+## Tidyverse
+
+tidyverse.org
+
+![](images/tidy.png)
+## Using packages
+
+::: {style="font-size: 1.8em; text-align: center"}
+```{r}
+#| echo: true
+#| eval: false
+install.packages("foo")
+# downloads files to computer
+# only need to do this 1x per computer!
+```
+
+:::
+
+## Tidyverse packages
+
+::: columns
+::: {.column width="50%"}
 
 ```{r}
 #| echo: true
-#| fig-width: 10
-#| fig-height: 4.5
-library(ggplot2)
-ggplot(mtcars, aes(hp, mpg, color = am)) +
-  geom_point() +  geom_smooth(formula = y ~ x, method = "loess")
+#| eval: false
+install.packages("ggplot2") 		
+install.packages("dplyr")
+install.packages("tidyr")			
+install.packages("readr")
+install.packages("purrr")			
+install.packages("tibble")
+install.packages("hms")				
+install.packages("stringr")
+install.packages("lubridate")	
+install.packages("forcats")
 ```
 
-::: footer
-Learn more: [Executable Code](https://quarto.org/docs/presentations/revealjs/#executable-code)
 :::
 
-## LaTeX Equations
-
-[MathJax](https://www.mathjax.org/) rendering of equations to HTML
-
-::: columns
-::: {.column width="40%"}
-``` tex
-\begin{gather*}
-a_1=b_1+c_1\\
-a_2=b_2+c_2-d_2+e_2
-\end{gather*}
-\begin{align}
-a_{11}& =b_{11}&
-  a_{12}& =b_{12}\\
-a_{21}& =b_{21}&
-  a_{22}& =b_{22}+c_{22}
-\end{align}
-```
-:::
-
-::: {.column width="60%"}
-```{=tex}
-\begin{gather*}
-a_1=b_1+c_1\\
-a_2=b_2+c_2-d_2+e_2
-\end{gather*}
-```
-```{=tex}
-\begin{align}
-a_{11}& =b_{11}&
-  a_{12}& =b_{12}\\
-a_{21}& =b_{21}&
-  a_{22}& =b_{22}+c_{22}
-\end{align}
-```
-:::
-:::
-
-::: footer
-Learn more: [LaTeX Equations](https://quarto.org/docs/authoring/markdown-basics.html#equations)
-:::
-
-## Column Layout {.smaller}
-
-Arrange content into columns of varying widths:
-
-::: columns
-::: {.column width="35%"}
-#### Motor Trend Car Road Tests
-
-The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles.
-:::
-
-::: {.column width="3%"}
-:::
-
-::: {.column width="62%"}
-```{r}
-knitr::kable(head(mtcars)[,c("mpg",	"cyl", "disp", "hp", "wt")])
-```
-:::
-:::
-
-::: footer
-Learn more: [Multiple Columns](https://quarto.org/docs/presentations/revealjs/#multiple-columns)
-:::
-
-## Incremental Lists
-
-Lists can optionally be displayed incrementally:
-
-::: incremental
--   First item
--   Second item
--   Third item
-:::
-
-. . .
-
-<br/> Insert pauses to make other types of content display incrementally.
-
-::: footer
-Learn more: [Incremental Lists](https://quarto.org/docs/presentations/revealjs/#incremental-lists)
-:::
-
-## Fragments
-
-Incremental text display and animation with fragments:
-
-<br/>
-
-::: {.fragment .fade-in}
-Fade in
-:::
-
-::: {.fragment .fade-up}
-Slide up while fading in
-:::
-
-::: {.fragment .fade-left}
-Slide left while fading in
-:::
-
-::: {.fragment .fade-in-then-semi-out}
-Fade in then semi out
-:::
-
-. . .
-
-::: {.fragment .strike}
-Strike
-:::
-
-::: {.fragment .highlight-red}
-Highlight red
-:::
-
-::: footer
-Learn more: [Fragments](https://quarto.org/docs/presentations/revealjs/advanced.html#fragments)
-:::
-
-## Slide Backgrounds {background="#43464B"}
-
-Set the `background` attribute on a slide to change the background color (all CSS color formats are supported).
-
-Different background transitions are available via the `background-transition` option.
-
-::: footer
-Learn more: [Slide Backgrounds](https://quarto.org/docs/presentations/revealjs/#color-backgrounds)
-:::
-
-## Media Backgrounds {background="#43464B" background-image="images/milky-way.jpeg"}
-
-You can also use the following as a slide background:
-
--   An image: `background-image`
-
--   A video: `background-video`
-
--   An iframe: `background-iframe`
-
-::: footer
-Learn more: [Media Backgrounds](https://quarto.org/docs/presentations/revealjs/#image-backgrounds)
-:::
-
-## Auto-Animate {auto-animate="true" auto-animate-easing="ease-in-out"}
-
-Automatically animate matching elements across slides with Auto-Animate.
-
-::: r-hstack
-::: {data-id="box1" auto-animate-delay="0" style="background: #2780e3; width: 200px; height: 150px; margin: 10px;"}
-:::
-
-::: {data-id="box2" auto-animate-delay="0.1" style="background: #3fb618; width: 200px; height: 150px; margin: 10px;"}
-:::
-
-::: {data-id="box3" auto-animate-delay="0.2" style="background: #e83e8c; width: 200px; height: 150px; margin: 10px;"}
-:::
-:::
-
-::: footer
-Learn more: [Auto-Animate](https://quarto.org/docs/presentations/revealjs/advanced.html#auto-animate)
-:::
-
-## Auto-Animate {auto-animate="true" auto-animate-easing="ease-in-out"}
-
-Automatically animate matching elements across slides with Auto-Animate.
-
-::: r-stack
-::: {data-id="box1" style="background: #2780e3; width: 350px; height: 350px; border-radius: 200px;"}
-:::
-
-::: {data-id="box2" style="background: #3fb618; width: 250px; height: 250px; border-radius: 200px;"}
-:::
-
-::: {data-id="box3" style="background: #e83e8c; width: 150px; height: 150px; border-radius: 200px;"}
-:::
-:::
-
-::: footer
-Learn more: [Auto-Animate](https://quarto.org/docs/presentations/revealjs/advanced.html#auto-animate)
-:::
-
-## Slide Transitions {.smaller}
-
-The next few slides will transition using the `slide` transition
-
-| Transition | Description                                                            |
-|-----------------|-------------------------------------------------------|
-| `none`     | No transition (default, switch instantly)                              |
-| `fade`     | Cross fade                                                             |
-| `slide`    | Slide horizontally                                                     |
-| `convex`   | Slide at a convex angle                                                |
-| `concave`  | Slide at a concave angle                                               |
-| `zoom`     | Scale the incoming slide so it grows in from the center of the screen. |
-
-::: footer
-Learn more: [Slide Transitions](https://quarto.org/docs/presentations/revealjs/advanced.html#slide-transitions)
-:::
-
-## Tabsets {.smaller .scrollable transition="slide"}
-
-::: panel-tabset
-### Plot
+::: {.column width="50%"}
 
 ```{r}
-library(ggplot2)
-ggplot(mtcars, aes(hp, mpg, color = am)) +
-  geom_point() +  geom_smooth(formula = y ~ x, method = "loess")
+#| echo: true
+#| eval: false
+install.packages("DBI")				
+install.packages("haven")
+install.packages("httr")				
+install.packages("jsonlite")
+install.packages("readxl")		
+install.packages("rvest")
+install.packages("xml2")				
+install.packages("modelr")
+install.packages("broom")
 ```
 
-### Data
+:::
+
+:::
+
+
+## Tidyverse
+
+An R package that serves as a shortcut for installing and loading the components of the tidyverse. 
+
+::: {style="font-size: 1.8em; text-align: center"}
 
 ```{r}
-knitr::kable(mtcars)
+#| echo: true
+#| eval: false
+install.packages("tidyverse")	
 ```
+
+
 :::
 
-::: footer
-Learn more: [Tabsets](https://quarto.org/docs/presentations/revealjs/#tabsets)
+## Programming pattern
+
+
+![](images/tidyprogram.png)
+
+## Tidy data
+
+- Main characteristics of tidy data
+
+  - each variable is a column
+  - each observation is a row
+  - each value is a different cell
+  
+
+![](images/tidydata.png)
+# Reading in data
+
+## Reading in data
+
+ - show option of import dataset
+ - show option of read_csv
+ - mention working directory
+ - `getwd()` shows working directory
+ 
+# Transform data with dplyr
+
+## Isolating data of interest
+
+::: {style="font-size: 1.4em"}
+
+[select()]{style="color:darkcyan"} - extract [variables]{style="color:darkcyan"} (columns)
+
+[filter()]{style="color:darkcyan"} - extract [cases]{style="color:darkcyan"} (rows)
+
+[arrange()]{style="color:darkcyan"} - reorder [cases]{style="color:darkcyan"}
+
 :::
 
-## Interactive Slides {.smaller transition="slide"}
 
-Include Jupyter widgets and htmlwidgets in your presentations
+## select()
+
+Extract columns by name.
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+select(.data, <column(s)>)
+
+# e.g.
+
+# data %>%
+#   select(column1, column2, column3)
+```
+
+:::
+
+- no need to specify data again within the `select` function here, because data is being "piped" into the function
+
+
+## select(): example
 
 ```{r}
 #| echo: false
-#| fig-height: 5
-library(leaflet)
-leaflet() %>%
-  addTiles() %>%  # Add default OpenStreetMap map tiles
-  addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R")
+#| eval: true
+library(babynames)
+library(tidyverse)
 ```
 
-::: footer
-Learn more: [Jupyter widgets](https://quarto.org/docs/interactive/widgets/jupyter.html), [htmlwidgets](https://quarto.org/docs/interactive/widgets/htmlwidgets.html)
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+select(babynames, name, prop)
+```
+
 :::
 
-## And More...
+## select(): example with pipe
+The following code uses the pipe and does the same thing as previous slide. 
 
--   [Touch](https://quarto.org/docs/presentations/revealjs/advanced.html#touch-navigation) optimized (presentations look great on mobile, swipe to navigate slides)
--   [Footer & Logo](https://quarto.org/docs/presentations/revealjs/#footer-logo) (optionally specify custom footer per-slide)
--   [Auto-Slide](https://quarto.org/docs/presentations/revealjs/presenting.html#auto-slide) (step through slides automatically, without any user input)
--   [Multiplex](https://quarto.org/docs/presentations/revealjs/presenting.html#multiplex) (allows your audience to follow the slides of the presentation you are controlling on their own phone, tablet or laptop).
+::: {style="font-size: 1.4em"}
 
-::: footer
-Learn more: [Quarto Presentations](https://quarto.org/docs/presentations/revealjs/)
+```{r}
+#| echo: true
+#| eval: true
+
+babynames %>%
+  select(name, prop)
+```
+
 :::
+ - R and RStudio will automatically tab indent the line following the pipe
+ - helps for readability of code (for yourself and others!)
+ 
+## select(): helper functions
+
+Can also select variables with helper functions.
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+mpg %>%
+  select(cty:class)
+
+```
+
+:::
+
+## select(): helper functions
+
+::: {style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  select(-c(cty, hwy))
+```
+:::
+
+## select(): helper functions
+
+::: {style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  select(starts_with("c"))
+```
+:::
+
+## select(): helper functions
+
+::: {style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  select(ends_with("y"))
+```
+:::
+
+## filter
+
+Extract rows that meet logical criteria
+
+::: {style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: false
+data %>%
+  filter(<criteria>)
+```
+:::
+
+- Criteria can be one or more logical tests. Returns each row for which the test is TRUE. 
+
+- Takes in a data frame or tibble and returns a data frame / tibble. 
+
+::: notes
+tribble is used to create a row-wise, readable tibble. useful for creating small tables of data. 
+a tibble is similar to a data frame. two key differences are 1) how they are printed and 2) . When a tibble is printed, it shows the first ten rows and all the columns that can be fit on a screen
+:::
+
+## filter(): example
+
+::: {style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  filter(name == "Garrett")
+```
+:::
+
+- `==` tests whether two things are equal or not. If yes, returns `TRUE`, if not, returns `FALSE`. 
+
+- Note: Be sure to use `==` as a logical criteria and not `=` (not trying to assign a value to a variable). 
+
+## Logical tests
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: false
+x < y      # less than
+x > y      # greater than
+x == y     # equal to
+x <= y     # less than or equal to
+x >= y     # greater than or equal to
+x != y     # not equal to
+x %in% y   # group membership
+is.na(x)   # is NA
+!is.na(x)  # is not NA
+```
+
+:::
+
+## Two common mistakes
+
+1. Using `=` instead of `==`
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+babynames %>%
+  filter(name = "Sea")   # incorrect
+
+babynames %>%
+  filter(name == "Sea")  # correct
+```
+
+:::
+
+2. Forgetting quotes
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+babynames %>%
+  filter(name = Sea)     # incorrect
+
+babynames %>%
+  filter(name == "Sea")  # correct
+```
+
+:::
+
+## fiter()
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+babynames %>%
+  filter(name == "Garrett", year == 1880)
+```
+
+:::
+
+## filter()
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+babynames %>%
+  filter(name == "Garrett" & year == 1880)
+```
+
+:::
+
+## Boolean operators
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+a & b         # and
+a | b         # or
+xor(a, b)     # exclusive or (if two values same, returns F)
+!a            # not
+( )           # for grouping tests; & evaluates before |
+```
+
+:::
+
+## Boolean operators: example
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+x <- 2.5
+x >=2 & x < 3   # both conditions are true
+```
+
+:::
+
+## filter() with conditions
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+babynames %>%
+  filter(name =="Sue", sex == "M")
+```
+
+:::
+
+## filter() with conditions
+
+parentheses matter!
+
+::: {style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+babynames %>%
+  filter((n==5 | n==6) & year == 1880)
+```
+:::
+ 
+## More ommon mistakes
+
+3. Collapsing multiple tests into one
+
+::: {style="font-size: 1.2em"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+babynames %>%
+  filter(10 < n < 20) # throws an error
+
+babynames %>%
+  filter(10 < n, n < 20) # correct
+```
+
+:::
+
+## More Common Mistakes
+
+4. Stringing together multiple tests, when you could use `%in%`
+
+::: {style="font-size: 1.2em"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+# will run, just not efficient
+babynames %>%
+  filter(n == 5 | n == 6 | n == 7 | n == 8) 
+
+# better
+babynames %>%
+  filter(n %in% c(5, 6, 7, 8)) 
+
+# or, alternatively:
+vec <- 5:8
+babynames %>%
+  filter(n %in% vec)
+```
+
+:::
+
+## arrange()
+Order data from smallest to largest values
+
+::: {style="font-size: 1.2em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+babynames %>%
+  arrange(n)
+```
+
+:::
+
+## arrange()
+Order data from largest to smallest values
+
+::: {style="font-size: 1.2em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+babynames %>%
+  arrange(desc(n))
+```
+
+:::
+
+## Performing multiple steps
+
+::: {style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+
+boys_2015 <- babynames %>% filter(year == 2015, sex == "M")
+boys_2015 <- boys_2015 %>% select(name, n)
+boys_2015 <- boys_2015 %>% arrange(desc(n))
+boys_2015
+```
+:::
+
+## Performing multiple steps: nesting functions
+Not recommended - gets quite confusing
+
+::: {style="font-size: 1.2em"}
+
+```{r}
+#| echo: true
+#| eval: true
+
+arrange(select(filter(babynames, year == 2015, 
+  sex == "M"), name, n), desc(n))
+```
+
+:::
+
+## Performing multiple steps: piping each step
+  - Recommended!
+  - Tab indentation allows for easily readable code
+  - Easier to debug
+
+::: {style="font-size: 1.2em"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+babynames %>% 
+  filter(year == 2015, sex == "M") %>%
+  select(name, n) %>%
+  arrange(desc(n))
+```
+
+:::
+
+## What if we wanted to visualize?
+How popular was the name "Garrett" for males over time?
+
+
+```{r}
+#| echo: true
+#| eval: true
+#| fig-width: 7
+#| fig-height: 4
+
+babynames %>% 
+  filter(name == "Garrett", sex == "M") %>%
+  select(year, prop) %>%
+  ggplot() +
+    geom_line(mapping = aes(year, prop))
+```
+
+
+## Plotting groups
+
+Plotting the popularity of the name "Michael" over time. 
+
+Note that we did not filter on sex. 
+
+
+```{r}
+#| echo: true
+#| eval: true
+#| fig-width: 7
+#| fig-height: 4
+babynames %>% 
+  filter(name == "Michael") %>%
+  ggplot() +
+    geom_point(mapping = aes(year, prop))
+```
+
+
+## Plotting groups
+
+```{r}
+#| echo: true
+#| eval: true
+#| fig-width: 7
+#| fig-height: 4.5
+
+babynames %>% 
+  filter(name == "Michael") %>%
+  ggplot() +
+    geom_line(mapping = aes(year, prop))
+```
+
+## Plotting groups, adding in color
+
+```{r}
+#| echo: true
+#| eval: true
+#| fig-width: 7
+#| fig-height: 4.5
+
+babynames %>% 
+  filter(name == "Michael") %>%
+  ggplot() +
+    geom_line(mapping = aes(year, prop, color = sex))
+```
+
+## Plotting with facet_wrap()
+
+```{r}
+#| echo: true
+#| eval: true
+#| fig-width: 9
+#| fig-height: 4.5
+
+babynames %>% 
+  filter(name == "Michael") %>%
+  ggplot() +
+    geom_line(mapping = aes(year, prop)) +
+    facet_wrap(~sex)
+```
+
+# summarize()
+
+## summarize()
+Compute table of summaries. 
+Takes a vector as input, returns single value as output. 
+See summary functions on cheat sheet!
+
+::: {style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  head(3) # look at first three rows
+
+babynames %>%
+  summarize(total = sum(n), max = max(n))
+```
+
+:::
+
+## n()
+The number of rows in a dataset/group. 
+::: {style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  head(3) # look at first three rows
+
+babynames %>%
+  summarize(n = n())
+```
+:::
+
+## n_distinct()
+
+The number of distinct values in a variable. 
+
+::: {style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  head(3) # look at first three rows
+
+babynames %>%
+  summarize(n = n(), nname = n_distinct(name))
+```
+:::
+
+## How to define name popularity?
+
+A name is popular if: 
+
+1. Sums - a large number of children have the same name when you sum across years. 
+
+## Name popularity example: Khaleesi
+
+::: {style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  filter(name == "Khaleesi" & sex == "F")
+```
+:::
+
+
+## Name popularity example: Khaleesi
+
+::: {style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  filter(name == "Khaleesi" & sex == "F") %>%
+  summarize(total = sum(n))
+```
+
+:::
+
+Question: Can we do this for each name? 
+
+# Grouping cases
+
+
+## grouping
+
+# ggplot2()
+
+## Visualize data with ggplot2
+
+## mappings
+
+## facets
+
+## geoms
+
+
+
+# mutate()
+
+## Create new variables with mutate()
+
+# Communicate results with R Markdown
+
+# Modeling data
+
+## broom
+
+## multivariate regression
