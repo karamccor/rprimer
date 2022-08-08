@@ -236,6 +236,11 @@ Speaker notes go here.
 :::
 
 
+- Online reference for cheat sheets:
+
+- rstudio.cloud/learn/cheat-sheets
+
+- Click cheat sheets in sidebar!
 
 ::: notes
 Packages in the tidyverse share a common philosophy of data, and are designed to work together naturally. 
@@ -873,7 +878,9 @@ babynames %>%
 :::
 
 ## n()
+
 The number of rows in a dataset/group. 
+
 ::: {style="font-size: 1.2em"}
 ```{r}
 #| echo: true
@@ -937,25 +944,689 @@ Question: Can we do this for each name?
 
 # Grouping cases
 
+## Grouping cases
+
+- Creating a small pollution dataset for a few cities based on small and large particles 
+
+- Units for amount are $\mu g / m^2$
+
+:::{.column width="60%"}
+```{r}
+#| echo: true
+#| eval: true
+pollution <- tribble(
+       ~city,   ~size, ~amount,
+  "New York", "large",      23, 
+  "New York", "small",      14, 
+  "London",   "large",      22,
+  "London",   "small",      16, 
+  "Beijing",  "large",     121, 
+  "Beijing",  "small",     56
+)
+
+```
+:::
+
+:::{.column width="35%"}
+```{r}
+pollution  %>%
+  as.data.frame()
+```
+:::
 
 ## grouping
 
-# ggplot2()
+:::{style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+pollution  %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+:::
 
-## Visualize data with ggplot2
+- This summary finds the overall mean, the overall sum, and the overall number of observations. 
+- Not quite what we want...
 
-## mappings
+## group_by()
 
-## facets
+- Use `group_by()` with `summarize()` to summarize by groups. 
 
-## geoms
+:::{style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+pollution  %>%
+  group_by(city)
+```
+:::
 
+## group_by()
 
+- Same code as before, but first grouping by city
+
+:::{style="font-size: 1.4em"}
+```{.r code-line-numbers="2"}
+pollution  %>%
+  group_by(city) %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+:::
+
+:::{style="font-size: 1.4em"}
+```{r }
+pollution  %>%
+  group_by(city) %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+:::
+
+## group_by()
+
+What would happen if we ran this code? 
+
+:::{style="font-size: 1.4em"}
+```{r }
+#| echo: true
+#| eval: false
+pollution  %>%
+  group_by(city, size) %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+:::
+
+## Exercise 3
+
+Group the `babynames` dataset by sex and then find out the total number of names for each group. 
+
+## ungroup()
+
+Removes grouping criteria from a data frame. 
+
+:::{style="font-size: 1.4em"}
+```{r }
+#| echo: true
+#| eval: true
+babynames  %>%
+  group_by(sex) %>%
+  ungroup() %>%
+  summarize(total = sum(n))
+```
+:::
+
+## Exercise 4
+
+Group the `babynames` dataset by name and sex, find the total number of names for each combination, and then arrange the totals from largest to smallest. 
+
+## plotting groups
+
+```{r }
+#| echo: false
+#| eval: true
+babynames %>%
+  group_by(name, sex) %>% 
+  summarise(total = sum(n)) %>% 
+  arrange(desc(total)) %>% 
+  ungroup() %>% 
+  slice(1:10) %>% 
+  ggplot() +
+    geom_col(mapping = aes(x = fct_reorder(name, 
+      desc(total)), y = total, fill = sex)) +
+    theme_bw() +
+    scale_fill_brewer() +
+    labs(x = "name")
+```
+
+## plotting groups
+
+Review the following code, then complete Exercise 5. 
+
+```{r }
+#| echo: true
+#| eval: false
+babynames %>%
+  group_by(name, sex) %>% 
+  summarise(total = sum(n)) %>% 
+  arrange(desc(total)) %>% 
+  ungroup() %>% 
+  slice(1:10) %>% 
+  ggplot() +
+    geom_col(mapping = aes(x = fct_reorder(name, 
+      desc(total)), y = total, fill = sex)) +
+    theme_bw() +
+    scale_fill_brewer() +
+    labs(x = "name")
+```
+
+## Visualizing the number of children over time
+
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  group_by(year) %>% 
+  summarise(n_children = sum(n)) %>% 
+  ggplot() +
+    geom_line(mapping = aes(x = year, y = n_children))
+```
 
 # mutate()
 
-## Create new variables with mutate()
+## mutate()
 
+Create new columns
+
+:::{style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  mutate(percent = round(prop*100, 2))
+```
+:::
+
+## mutate()
+
+:::{style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: true
+babynames %>%
+  mutate(percent = round(prop*100, 2), 
+         nper = round(percent))
+```
+:::
+
+## recap
+
+::: {.column width="40%"}
+
+![](images/tidy_summary.png)
+
+:::
+
+::: {.column width="50%"}
+
+- Extract variables with `select()`
+- Extract cases with `filter()`
+- Arrange cases with `arrange()`
+- Make tables of summaries with `summarize()`
+- Make a new variable with `mutate()`
+
+:::
+
+# ggplot2()
+
+## Telling a story with data
+
+"The simple graph has brought more information to the data analyst's mind than any other device." - John Tukey
+
+## ggplot2()
+
+Grammar of graphics
+
+![](images/gg.png)
+
+
+## Dataset exploration: mpg
+
+Fuel economy data for 38 models of car.
+Find out more by typing `?mpg` into the console. 
+
+:::{style="font-size: 1.4em"}
+
+```{r}
+#| echo: true
+#| eval: false
+mpg
+```
+
+:::
+
+![](images/mpg.png)
+
+## Exercise 6
+
+- In your groups:
+
+- What relationship do you expect to see between engine size (displ) and mileage (hwy)?
+
+- Run the following code to explore this relationship. What do you see? 
+
+```{r}
+#| echo: true
+#| eval: false
+mpg %>%                             
+  ggplot(mapping = aes(x = displ, y = hwy)) +  
+  geom_point()                     
+```
+
+## Exercise 6
+
+:::{style="font-size: 1.2em"}
+
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%                             # use mpg data
+  ggplot(mapping = aes(x = displ,   # engine size
+                       y = hwy)) +  # mileage  
+  geom_point()                      # add points
+```
+:::
+
+## ggplot2()
+
+- "Initialize" a plot with `ggplot2()`
+- Add layers with geom_functions
+- Pro tip: Always put the + at the end of a line, never at the start!
+
+:::{style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: false
+mpg %>%                             # use mpg data
+  ggplot(mapping = aes(x = displ,   # engine size
+                       y = hwy)) +  # mileage  
+  geom_point()                      # add points
+```
+:::
+
+## ggplot2() template
+
+:::{style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: false
+
+<DATA> %>%
+  ggplot(mapping = aes(<MAPPINGS>)) +
+  <GEOM_FUNCTION>
+```
+:::
+
+## ggplot2()
+Visualizations can help us continue to explore the data. 
+
+Why do these cars get better mileage?
+
+```{r}
+mpg %>%                             # use mpg data
+  ggplot(mapping = aes(x = displ,   # engine size
+                       y = hwy)) +  # mileage  
+  geom_point()                      # add points
+```
+
+Draw circle around the outliers
+
+## Visualize data with ggplot2
+How can we use aesthetics to better tell our story? 
+
+After telling ggplot() your `x` and `y`, can give additional aesthetic property, and the variable to map it to. 
+```{r}
+#| echo: true
+#| eval: false
+
+# changew color of last aesthetic
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, color = class))
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, size = class))
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, shape = class))
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, alpha = class))
+
+```
+
+## aesthetics
+
+Can alter color and size for discrete and continuous variables, and shape for discrete variables. 
+
+
+![](images/aes.png)
+
+## aesthetics
+
+Note legend is added automatically. 
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+```
+# facets
+
+## facets
+Subplots that display subsets of data
+
+```{r}
+mpg %>%
+  filter(manufacturer %in% unique(mpg$manufacturer)[1:8]) %>%
+  ggplot(mapping = aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_wrap(~manufacturer)
+```
+## facet template
+You can plot data with facets using the following template:
+
+
+:::{style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: false
+
+<DATA> %>%
+  ggplot(mapping = aes(<MAPPINGS>)) +
+  <GEOM_FUNCTION> +
+  <FACET_FUNCTION>
+```
+
+:::
+
+- `facet_grid()`: 2D grid, rows ~ cols, . for no split
+- `facet_wrap()`: 1D ribbon wrapped into 2D
+look up how these differ..
+
+## labeling the graph
+
+Exercise 7
+- Among your groups, run the following code in a new chunk. 
+
+- What does each line within the `labs()` function do? 
+
+:::{style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: false
+
+mpg %>%
+  ggplot(mapping = aes(displ, hwy, color = class)) +
+  geom_point() +
+  labs(title = "Fuel Efficiency by Engine Size",
+       subtitle = "Data facetted by class",
+       x = "Engine Size (displacement in liters)",
+       y = "Fuel Efficiency (MPG)",
+       color = "Class of\nAutomobile",
+       caption = "Data from the EPA")
+
+```
+
+:::
+
+## labeling the plot
+
+```{r}
+mpg %>%
+  ggplot(mapping = aes(displ, hwy, color = class)) +
+  geom_point() +
+  labs(title = "Fuel Efficiency by Engine Size",
+       subtitle = "Data facetted by class",
+       x = "Engine Size (displacement in liters)",
+       y = "Fuel Efficiency (MPG)",
+       color = "Class of\nAutomobile",
+       caption = "Data from the EPA")
+
+```
+
+# geoms
+
+## geoms
+
+:::{style="font-size: .8em"}
+- How are these plots different?
+
+- Different geometric object, e.g. the visual object used to represent the data. 
+:::
+
+::: {.column width="49%"}
+```{r}
+mpg %>% 
+  ggplot() +
+  geom_point(aes(x = displ, y = hwy))
+```
+:::
+
+::: {.column width="49%"}
+```{r}
+mpg %>% 
+  ggplot() +
+  geom_smooth(aes(x = displ, y = hwy))
+```
+:::
+
+:::{style="font-size: .8em"}
+Check out cheat sheets for more geom functions. 
+:::
+## geom functions
+
+:::{style="font-size: .8em"}
+
+- Google is your friend! I often use: "How to plot ____ in r ggplot"
+- check help documentation often!
+:::
+
+::: {style="fig-width: 0.8em"}
+![](images/geom.png)
+:::
+
+## Exercise 8
+
+:::{style="font-size: .7em"}
+1. In a code chunk, create the code to produce the following plot. 
+2. In a new code chunk, alter the code to produce boxplots. Use the cheatsheet!
+3. Bonus: Add an informative title to the plot. 
+:::
+
+```{r}
+mpg %>%
+  ggplot() +
+  aes(x = class, y = hwy) +
+  geom_point()
+```
+
+## Altering options within geom functions
+What is the difference between these two plots? 
+
+::: {.column width="49%"}
+```{r}
+#|fig-width = 2.5
+#|fig-height = 3
+mpg %>%
+  ggplot() +
+  geom_histogram(aes(x = hwy))
+```
+:::
+
+::: {.column width="49%"}
+```{r}
+#|fig-width = 2.5
+#|fig-height = 3
+mpg %>%
+  ggplot() +
+  geom_histogram(aes(x = hwy), bins = 17)
+```
+:::
+
+## geom functions
+Check help pages!
+ - scan for relevant information, ignore what doesn't make sense, try examples!
+ 
+ - `?geom_histogram`
+ 
+![](images/help_geom.png)
+
+
+## Exercise 10
+
+Make a bar chart of `class` below. Use the cheat sheet and/or google. Hint: do not supply a `y` variable. 
+
+```{r}
+mpg %>%
+  ggplot() +
+  geom_bar(aes(x = class, fill = class))
+```
+
+## Exercise 10
+I do this all the time...
+
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  ggplot() +
+  geom_bar(aes(x = class, color = class))
+```
+
+## Exercise 10
+
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  ggplot() +
+  geom_bar(aes(x = class, fill = class))
+```
+
+
+## filling with a new variable
+
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  ggplot() +
+  geom_bar(aes(x = class, fill = drv))
+```
+
+## Stacking layers
+
+What will this code do?
+
+:::{style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: false
+mpg %>%
+  ggplot() +
+  geom_point(aes(displ, hwy)) +
+  geom_smooth(aes(displ, hwy))
+```
+:::
+
+## Stacking layers
+Each new geom adds a new layer
+
+:::{style="font-size: 1.2em"}
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  ggplot() +
+  geom_point(aes(displ, hwy)) +
+  geom_smooth(aes(displ, hwy))
+```
+:::
+
+# global vs local
+## changing colors for different geom layers
+
+Mappings (and data) appearing in `ggplot()` will apply globally to each layer. 
+```{r}
+#| echo: true
+#| eval: true
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth()
+```
+## global vs. local
+Data can also be set locally or globally.
+```{r}
+#| echo: true
+#| eval: true
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) + 
+  geom_smooth(data = filter(mpg, drv == "f"))
+
+```
+
+## interactivity
+
+What's different about this plot? Run the code!
+```{r}
+#| echo: true
+#| eval: false
+p <- ggplot(mpg) + 
+  geom_point(aes(displ, hwy)) +
+  geom_smooth(aes(displ, hwy))
+
+library(plotly)
+ggplotly(p)
+
+```
+
+## interactivity
+
+```{r}
+#| echo: true
+#| eval: true
+p <- ggplot(mpg) + 
+  geom_point(aes(displ, hwy)) +
+  geom_smooth(aes(displ, hwy))
+
+library(plotly)
+ggplotly(p)
+
+```
+# interactivity
+
+## plotly
+Tools for making interactive plots. 
+plot.ly/ggplot2
+
+![](images/plotly.png)
+
+# saving graphs
+
+## Saving graphs
+Graphic User Interface (GUI) method: right-click on plot
+
+![](images/right-click.png)
+## code method
+
+`ggsave()` saves the last plot (by default). 
+
+Uses size on screen:
+```{r}
+#| echo: true
+#| eval: false
+ggsave("my-plot.pdf")
+ggsave("my-plot.png")
+```
+
+Specify size, units:
+
+```{r}
+#| echo: true
+#| eval: false
+ggsave("my-plot.pdf", 
+       width = 4, 
+       unit = "in")
+```
+
+## R4DS resource
+
+r4ds.had.co.nz
+
+Ultimate resource for all of today!
+
+![](images/r4ds.png)
 # Communicate results with R Markdown
 
 # Modeling data
