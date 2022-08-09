@@ -225,6 +225,15 @@ Speaker notes go here.
 ## RStudio Interface
 
 ![](images/f4.png)
+# Basics of R Markdown
+
+## demo
+
+- Opening a new R markdown file (.Rmd)
+- Creating new code chunks
+- Running code chunks
+- I highly recommend using Projects!
+- Knitting document into .html can be a great way to share progress with collaborators
 
 # Tidyverse
 
@@ -253,6 +262,15 @@ make figure smaller!
 tidyverse.org
 
 ![](images/tidy.png)
+
+## r4ds
+The ultimate resource for much of today!
+
+::: {style="font-size: 1.6em"}
+r4ds.had.co.nz
+:::
+
+![](images/r4ds.png)
 ## Using packages
 
 ::: {style="font-size: 1.8em; text-align: center"}
@@ -1556,6 +1574,11 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
 
 ```
 
+## ggplot2 template
+
+An example of a `ggplot2()` template
+
+![](images/ggplot_temp.png)
 ## interactivity
 
 What's different about this plot? Run the code!
@@ -1598,6 +1621,7 @@ plot.ly/ggplot2
 Graphic User Interface (GUI) method: right-click on plot
 
 ![](images/right-click.png)
+
 ## code method
 
 `ggsave()` saves the last plot (by default). 
@@ -1620,6 +1644,9 @@ ggsave("my-plot.pdf",
        unit = "in")
 ```
 
+## hello
+hello
+
 ## R4DS resource
 
 r4ds.had.co.nz
@@ -1631,6 +1658,470 @@ Ultimate resource for all of today!
 
 # Modeling data
 
+## Models
+Building models
+
+![](images/models.png)
+
+## Models
+A low dimensional description of a higher dimensional data set.
+
+![](images/models2.png)
+
+
+## What is the model function? 
+
+![](images/models3.png)
+
+## What uncertainty is associated with the chosen model?
+
+![](images/uncertainty.png)
+
+## What are the residuals?
+
+![](images/residuals.png)
+
+
+## What are the predictions?
+
+![](images/predictions.png)
+
+## (Popular) modeling functions in R
+
+:::{style="font-size: .9em"}
+```{r}
+f <- c("lm()", "glm()", "gam()", 
+       "glmnet()", "rlm()", "rpart()", 
+       "randomForest()", "xgboost()")
+pa <- c("stats", "stats", "mgcv", "glmnet", 
+        "MASS", "rpart", "randomForest", 
+        "xgboost")
+fits <- c("linear models", 
+          "generalized linear models", 
+          "generalized additive models", 
+          "penalized linear models", 
+          "robust linear models", 
+          "trees", 
+          "random forests", 
+          "gradient boosting machines")
+df <- data.frame(f, pa, fits)
+colnames(df) <- c("function", "package", "fits")
+knitr::kable(df)
+```
+
+:::
+
+::: notes
+We will focus on lm() for now
+:::
+
+## Modeling example dataset from modelr package
+
+Income predictors extracted from National Longitudinal Study, sponsored by the US Bureau of Labor Statistics. 
+
+:::{style="font-size: 1.4em"}
+```{r}
+#| echo: true
+#| eval: true
+library(modelr)
+wages <- heights %>%
+  filter(income > 0)
+```
+
+:::
+
+## wages dataset
+
+```{r}
+#| echo: true
+#| eval: true
+wages %>%
+  slice(1:6) %>% # show only first six rows
+  knitr::kable()  # display in nice table format
+```
+
+
+## wages dataset (continued)
+
+Let's say we want to explore income as a variable in a linear model. 
+```{r}
+#| echo: true
+#| eval: true
+wages %>%
+  ggplot(aes(income)) +
+  geom_histogram()
+```
+Distribution is right-skewed. For `lm()` an assumption is that the data are normally distributed. Let's try a log transformation. 
+
+## wages data: log transformation
+
+```{r}
+#| echo: true
+#| eval: true
+wages %>%
+  ggplot(aes(log(income))) +
+  geom_histogram(binwidth = 0.25)
+```
+
+# lm()
+
+## lm()
+
+Fits a linear model to the data. 
+ 
+  - First argument is a formula describing the model equation. 
+  - Second argument is the data. 
+  - see `?lm()` for help. 
+
+```{r}
+#| echo: true
+#| eval: true
+
+lm(log(income) ~ education, data = wages)
+```
+
+## formulas
+
+Formula only needs to include the response and predictors
+
+$$y = \alpha + \beta x + \epsilon$$
+`y ~ x`
+
+## Exercise 10
+
+Fit the model below and then examine the output. What does it look like? 
+
+`mod_e <- lm(log(income) ~ education, data = wages)`
+
+
+## . 
+
+Use "." to pipe input to somewhere other than the first argument. 
+
+In this case, wages will be passed to the location of the `.`
+```{r}
+#| echo: true
+mod_e <- wages %>%
+  lm(log(income) ~ education, data = .)
+```
+
+# broom
+
 ## broom
 
+Turns model output into data frames!
+
+```{r}
+#| echo: true
+#| eval: true
+# install.packages("tidyverse")
+library(broom)
+```
+
+
+## broom
+Broom includes three functions which work for most types of models (and can be extended to more):
+
+1. `tidy()` - returns model coefficients, stats
+2. `glance()` - returns model diagnostics
+3. `augment()` - returns predictions, residuals, and other raw values
+
+## tidy()
+
+Returns useful model output as a data frame
+
+```{r}
+#| echo: true
+#| eval: true
+mod_e <- wages %>%
+  lm(log(income) ~ education, data = .)
+
+mod_e %>%
+  tidy() %>%
+  knitr::kable()
+```
+
+## glance()
+
+Returns common model diagnostics as a data frame
+
+```{r}
+#| echo: true
+#| eval: true
+mod_e %>%
+  glance() %>%
+  knitr::kable()
+```
+
+## augment()
+
+Returns data frame of model output related to original data points
+```{r}
+#| echo: true
+#| eval: true
+mod_e %>%
+  augment() %>%
+  knitr::kable()
+```
+
+
+## Exercise 11
+
+Use a pipe to model `log(income)` against `height`. Then use broom and dplyr to extract:
+
+1. The coefficient estimates and their related statistics. 
+
+2. The `adj.r.squared` and `p.value` for the overall model.
+
+
+## Exercise 11
+```{r}
+#| echo: true
+#| eval: true
+library(broom)
+mod_h <- wages %>% 
+  lm(log(income) ~ height, data=.)
+mod_h %>% 
+  tidy()
+mod_h %>% 
+  glance() %>% 
+  select(adj.r.squared, p.value)
+```
+
+## comparing models
+
+```{r}
+#| echo: true
+mod_h %>%
+  tidy() %>% filter(p.value < 0.05)
+
+mod_e %>%
+  tidy() %>% filter(p.value < 0.05)
+```
+So, which determines income?
+
+# multivariate regression
+
 ## multivariate regression
+To fit multiple predictors, add multiple variables to the formula: 
+
+```{r}
+#| echo: true
+#| eval: false
+log(income) ~ education + height
+```
+
+## modeling on education and height
+
+```{r}
+#| echo: true
+#| eval: true
+mod_eh <- wages %>%
+  lm(log(income) ~ education + height, data = .)
+
+mod_eh %>%
+  tidy()
+```
+
+
+## Exercise 12
+
+Model `log(income)` against `education` and `height` and `sex`. Can you interpret the coefficients?
+
+## Exercise 12
+
+```{r}
+#| echo: true
+#| eval: true
+mod_ehs <- wages %>%
+  lm(log(income) ~ education + height + sex, data = .)
+
+mod_ehs %>%
+  tidy()
+```
+
+Where is sexfemale?
+
+## Exercise 12
+```{r}
+mod_ehs %>%
+  tidy()
+```
+
+
+The mean log(income) for a female (baseline) is:
+log(income) = 7.79 + 0.148 * education + 0.00673 * height
+
+The mean log(income) for a male (baseline + adjustment) is:
+log(income) = 7.79 + 0.148 * education + 0.00673 * height + 0.462
+
+# model visualization
+
+## model visualization
+
+```{r}
+#| echo: true
+wages %>%
+  ggplot(aes(x = height, y = log(income))) +
+    geom_point(alpha = 0.1) +
+    geom_smooth(method = lm)   # fits y~x (mod_h)
+
+```
+
+## geom_smooth()
+
+Adds model line for predictiong `y~x` (default):
+
+```{r}
+#| echo: true
+#| eval: false
+p + geom_smooth(method = lm, se = TRUE, ...)
+```
+
+- First argument is an R modeling function to use to generate the line
+
+- `se = TRUE` tells R to include standard error bars
+- see help page for more argument options
+
+What about complex models, or residuals?
+
+## add_predictions()
+
+- In the modelr package
+- Uses the values in a data frame to generate a prediction for each case. Can be new data!
+
+```{r}
+#| echo: true
+#| eval: false
+add_predictions(data, model, var = "pred")
+```
+
+- `var = "pred"` gives new column this name
+
+## add_predictions() for height lm
+
+```{r}
+#| echo: true
+wages %>%
+  add_predictions(mod_h)
+```
+
+## add_residuals()
+
+Uses the values in a data frame to generate a residual for each case. 
+
+```{r}
+#| echo: true
+#| eval: false
+add_residuals(data, model, var = "resid")
+```
+
+- `var = "resid"` gives new column this name
+
+## add_residuals()
+
+```{r}
+#| echo: true
+wages %>%
+  add_residuals(mod_h)
+```
+
+## Exercise 13
+
+Use add_residuals() to create the plot below. 
+
+```{r}
+wages %>% 
+  add_predictions(mod_ehs) %>% 
+  ggplot(mapping = aes(x = height, y = pred, color = sex)) +
+    geom_line() +
+    facet_wrap(~ education)
+```
+## Exercise 13
+
+```{r}
+#| echo: true
+
+wages %>% 
+  add_predictions(mod_ehs) %>% 
+  ggplot(mapping = aes(x = height, y = pred, color = sex)) +
+    geom_line() +
+    facet_wrap(~ education)
+
+```
+
+## spread_residuals()
+
+Adds residuals for multiple models, each in their own column.
+
+```{r}
+#| echo: true
+#| eval: false
+spread_residuals(data, model1, model2, ...)
+```
+
+
+## spread_residuals()
+
+```{r}
+#| echo: true
+wages %>%
+  spread_residuals(mod_h, mod_eh, mod_ehs)
+```
+## gather_residuals()
+
+Adds residuals for multiple models as a pair of key:value columns (model:resid)
+
+```{r}
+#| echo: true
+#| eval: false
+gather_residuals(data, model1, model2, ...)
+```
+
+- Adds residuals from model1 and model2 to the cases in the specified data (duplicating rows as necessary)
+
+## gather_residuals()
+
+```{r}
+#| echo: true
+wages %>%
+  gather_residuals(mod_h, mod_eh, mod_ehs) %>%
+  arrange(income, height)
+```
+
+## predictions
+
+Modelr provides the equivalent functions for predictions
+
+::: {.column width="49%"}
+- `add_predictions()`
+- `spread_predictions()`
+- `gather_predictions()`
+
+:::
+
+::: {.column width="49%"}
+- `add_residuals()`
+- `spread_residuals()`
+- `gather_residuals()`
+
+:::
+
+## Recap
+
+::: {.column width="65%"}
+
+Use `glance()`, `tidy()`, and `augment()` to return model values in a data frame. 
+
+Use `add_predictions()` or `spread_predictions()` to visualize predictions. 
+
+Use `add_residuals()` or `gather_residuals()` or `spread_residuals()` to visualize residuals. 
+
+:::
+
+::: {.column width="30%"}
+
+![](images/broom.png)
+![](images/modelr.png)
+
+:::
