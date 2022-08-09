@@ -34,11 +34,21 @@ resources:
 ## Setup
 
 1. Open RStudio.
+2. Check out the example .html file. This is a sneak peek at what we will learn in this primer. 
 2. Open the Exercises.Rmd file in RStudio
 3. In the Console, type `install.packages("tidyverse")` and then Enter. 
 
 4. Run the first code chunk (the one that starts with `# load libraries`) in the .Rmd file by clicking on the green arrow at the top right of the chunk. 
 
+## Outline
+
+-   Introduction to R
+-   Introduction to Rstudio
+-   Transform Data
+-   Plot Data
+-   Model Data
+
+# Introduction to R
 
 ## Programming is a Learned Skill!
 
@@ -52,26 +62,29 @@ library(tidyverse)
 -   Small wins turn into large success.
 -   Goal of the primer is to learn to use RStudio to explore data and get help when things don't work (it will happen often!)
 
-## Outline
-
--   Introduction to R
--   Introduction to Rstudio
--   Transform Data
--   Plot Data
--   Model Data
--   Other
-
-# Introduction to R
 
 ## Introducing R
 
+::: columns
+
+::: {.column width="70%"}
+
+::: {style="font-size: .8em"}
 -   Open-source programming language and software environment for statistical computing and graphics
 -   Created in 1996
 -   Created by **R**oss Ihaka and **R**obert Gentleman (University of Auckland, New Zealand)
 -   Currently supported by R Foundation for Statistical Computing (Vienna, Austria)
 -   More information on the history of R at https://www.R-project.org
 
-## Intro to R
+:::
+:::
+
+::: {.column width="20%"}
+
+![](images/r.png)
+:::
+:::
+## R Basics
 
 -   Math
 -   Assignments
@@ -80,7 +93,7 @@ library(tidyverse)
 
 ## Math with R
 
-::: {style="font-size: 1.8em; text-align: center"}
+::: {style="font-size: 1.4em; text-align: center"}
 ```{r}
 #| echo: true
 # some math
@@ -92,12 +105,14 @@ library(tidyverse)
 3.14*3
 ```
 
+:::
+
 - Run code by highlighting code and then Cmd+Enter (for Mac) or Ctrl+Enter (for PC). 
 
 - In .Rmd files, can also run entire chunks with green arrow. 
 - Add comments with the `#`
 
-:::
+
 
 ## R is a functional language
 
@@ -105,7 +120,8 @@ library(tidyverse)
 - Values: 3, "California", "2015-03-07"
 
 - Objects: x <- [c(]{style="color:#cc0000"}5/6, 0.83, 7[)]{style="color:#cc0000"}
-  - To put multiple values into an object, use [c()]{style="color:#cc0000"}, stands for "combine"
+  - To assign a value to an object, use `<-`
+  - To assign multiple values into an object, use [c()]{style="color:#cc0000"}, stands for "combine"
 - Functions: [round]{style="color:#cc0000"}(x, digits = 3)
   - name without quotes
   - followed by () to run the function
@@ -123,10 +139,12 @@ https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/
 ```{r}
 #| echo: true
 x <- c(7/8, 2.5434, 7)
-
 round(x, digits = 3)
 ```
 :::
+
+- To access the help pages on any function, type `?function` in the console. 
+- Error messages can also sometimes be helpful to point you in the right direction. 
 
 ## Example
 
@@ -136,7 +154,6 @@ Vectorization
 ```{r}
 #| echo: true
 a <- c(1, 2, 3)
-
 b <- c(3, 4, 5)
 ```
 
@@ -147,6 +164,23 @@ a + b
 a * b
 ```
 :::
+
+
+## Example: functions
+
+::: {style="font-size: 1.8em; text-align: center"}
+```{r}
+#| echo: true
+
+values <- c(1:10, 17)
+print(values)
+mean(values)
+median(values)
+sd(values)
+
+```
+:::
+
 
 ## R symbols
 
@@ -173,16 +207,19 @@ Say
 :::
 :::
 
+- For assignment, I recommend using `<-` instead of `=` to reduce confusion!
+
 ## Example
 
-::: {style="font-size: 1.8em; text-align: center"}
+::: {style="font-size: 1.4em; text-align: center"}
 ```{r}
 #| echo: true
-c <- 1:5
-print(c)
+1:5              # a vector of the numbers 1 through 5
+c <- 1:5         # assign these numbers to the object c
+print(c)         # print contents of any object
 d <- c(0, 1, 7, 7, 7)
 print(d)
-c < d
+c < d            # compare each value of c and d
 ```
 :::
 
@@ -191,13 +228,12 @@ c < d
 ## Functions and packages
 
 ![](images/f5.png)
+
+
 ## Functions and packages
 
 ![](images/f6.png)
-::: notes
-An R package is a collection of functions, data, and documentation that extends the capabilities of base R.
 
-:::
 # Introduction to RStudio
 
 ## Intro to RStudio
@@ -206,28 +242,22 @@ An R package is a collection of functions, data, and documentation that extends 
 
 -   RStudio is an IDE (Integrated Development Environment)
 -   A place to write
-    -   Console
-    -   R Scripts
-    -   R Markdown
+    -   Console, R Scripts, R Markdown
 -   A place to open things
     -   Open plots, data, R (.R) or R Markdown (.Rmd) files
 -   A place for projects
     -   Self-contained structure
-    -   Consistent/easy pathing
     -   Keep relevant files/code together with output
 
 :::
 
-::: notes
-Speaker notes go here.
-:::
 
 ## RStudio Interface
 
 ![](images/f4.png)
 # Basics of R Markdown
 
-## demo
+## Demo
 
 - Opening a new R markdown file (.Rmd)
 - Creating new code chunks
@@ -235,26 +265,38 @@ Speaker notes go here.
 - I highly recommend using Projects!
 - Knitting document into .html can be a great way to share progress with collaborators
 
+## Projects
+
+- Projects allows you to keep all relevant files in one place
+- When you're in a Project session in RStudio, your working directory gets set to that project
+  - Anytime you import/export, points to this directory
+- Print working directory with `getwd()`
+
+
 # Tidyverse
 
 ## Tidyverse
 
+::: columns
+::: {.column width="50%"}
 
 ::: {style="fig-width: 0.8em"}
+
 ![](images/f8.png)
 :::
 
+:::
+
+::: {.column width="40%"}
 
 - Online reference for cheat sheets:
 
-- rstudio.cloud/learn/cheat-sheets
+  - rstudio.cloud/learn/cheat-sheets  (Make a free account)
 
-- Click cheat sheets in sidebar!
+  - Click cheat sheets in sidebar
 
-::: notes
-Packages in the tidyverse share a common philosophy of data, and are designed to work together naturally. 
 
-make figure smaller!
+:::
 :::
 
 ## Tidyverse
@@ -267,10 +309,20 @@ tidyverse.org
 The ultimate resource for much of today!
 
 ::: {style="font-size: 1.6em"}
-r4ds.had.co.nz
+[r4ds.had.co.nz](r4ds.had.co.nz)
 :::
 
+::: columns
+
+::: {.column width="50%"}
 ![](images/r4ds.png)
+:::
+
+::: {.column width="20%"}
+
+:::
+:::
+
 ## Using packages
 
 ::: {style="font-size: 1.8em; text-align: center"}
@@ -278,12 +330,15 @@ r4ds.had.co.nz
 #| echo: true
 #| eval: false
 install.packages("foo")
-# downloads files to computer
-# only need to do this 1x per computer!
+library(foo)
 ```
 
 :::
 
+ - downloads files to computer
+ - only need to install 1x per computer
+ - load the packages  with `library` 1x per session
+ 
 ## Tidyverse packages
 
 ::: columns
@@ -342,10 +397,13 @@ install.packages("tidyverse")
 
 :::
 
+- This code does the equivalent of that on the previous slide
+
 ## Programming pattern
 
 
 ![](images/tidyprogram.png)
+
 
 ## Tidy data
 
@@ -357,15 +415,38 @@ install.packages("tidyverse")
   
 
 ![](images/tidydata.png)
+
 # Reading in data
 
-## Reading in data
+## Reading in data: point and click
 
- - show option of import dataset
- - show option of read_csv
- - mention working directory
+ - Import dataset from test (readr)
+
+![](images/import1.png)
+
+## Reading in data: point and click
+
+![](images/import2.png)
+
+
+## Reading in data with code
+
+ - Highly recommend for code reproducibility
+ - Code version: `read_csv`
+ - Take note of working directory
  - `getwd()` shows working directory
  
+```{r}
+#| echo: true
+#| eval: false
+data <- read_csv(<PATH TO DATA>)
+data
+```
+
+## Exercise 1
+
+Read in the iris_example.csv file using `read_csv`, assigning it to a variable called `dat`. Then print the data. 
+
 # Transform data with dplyr
 
 ## Isolating data of interest
