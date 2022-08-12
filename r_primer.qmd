@@ -117,12 +117,12 @@ library(tidyverse)
 ## R is a functional language
 
 :::{.incremental}
-- Values: 3, "California", "2015-03-07"
+- [Values]{style="color:darkcyan"}: 3, "California", "2015-03-07"
 
-- Objects: x <- [c(]{style="color:#cc0000"}5/6, 0.83, 7[)]{style="color:#cc0000"}
+- [Objects]{style="color:darkcyan"}: x <- [c(]{style="color:#cc0000"}5/6, 0.83, 7[)]{style="color:#cc0000"}
   - To assign a value to an object, use `<-`
   - To assign multiple values into an object, use [c()]{style="color:#cc0000"}, stands for "combine"
-- Functions: [round]{style="color:#cc0000"}(x, digits = 3)
+- [Functions]{style="color:darkcyan"}: [round]{style="color:#cc0000"}(x, digits = 3)
   - name without quotes
   - followed by () to run the function
   - digits = an argument of function
@@ -133,7 +133,7 @@ possible homework about data structures:
 https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/
 :::
 
-## Example
+## Example: round function
 
 ::: {style="font-size: 1.8em; text-align: center"}
 ```{r}
@@ -146,9 +146,7 @@ round(x, digits = 3)
 - To access the help pages on any function, type `?function` in the console. 
 - Error messages can also sometimes be helpful to point you in the right direction. 
 
-## Example
-
-Vectorization
+## Example: vectorization
 
 ::: {style="font-size: 1.8em; text-align: center"}
 ```{r}
@@ -207,19 +205,19 @@ Say
 :::
 :::
 
-- For assignment, I recommend using `<-` instead of `=` to reduce confusion!
+For assignment, I recommend using `<-` instead of `=` to reduce confusion!
 
 ## Example
 
 ::: {style="font-size: 1.4em; text-align: center"}
 ```{r}
 #| echo: true
-1:5              # a vector of the numbers 1 through 5
-c <- 1:5         # assign these numbers to the object c
-print(c)         # print contents of any object
+1:5              # vector of numbers 1 through 5
+c <- 1:5         # assign to the object c
+print(c)         # print contents
 d <- c(0, 1, 7, 7, 7)
 print(d)
-c < d            # compare each value of c and d
+c < d            # compare each value
 ```
 :::
 
@@ -254,19 +252,29 @@ c < d            # compare each value of c and d
 
 ## RStudio Interface
 
+::: columns
+::: {.column width="70%"}
 ![](images/f4.png)
+:::
+
+::: {.column width="20%"}
+
+:::
+:::
+
 # Basics of R Markdown
 
-## Demo
+## Demo: R Markdown basics
 
 - Opening a new R markdown file (.Rmd)
 - Creating new code chunks
 - Running code chunks
-- I highly recommend using Projects!
-- Knitting document into .html can be a great way to share progress with collaborators
+
 
 ## Projects
 
+- I highly recommend using Projects!
+- Knitting document into .html can be a great way to share progress with collaborators
 - Projects allows you to keep all relevant files in one place
 - When you're in a Project session in RStudio, your working directory gets set to that project
   - Anytime you import/export, points to this directory
@@ -289,9 +297,10 @@ c < d            # compare each value of c and d
 
 ::: {.column width="40%"}
 
+- A collection of R packages developed by H. Wickham and others at RStudio. 
 - Online reference for cheat sheets:
 
-  - rstudio.cloud/learn/cheat-sheets  (Make a free account)
+  - [rstudio.cloud/learn/cheat-sheets](rstudio.cloud/learn/cheat-sheets)
 
   - Click cheat sheets in sidebar
 
@@ -314,11 +323,11 @@ The ultimate resource for much of today!
 
 ::: columns
 
-::: {.column width="50%"}
+::: {.column width="70%"}
 ![](images/r4ds.png)
 :::
 
-::: {.column width="20%"}
+::: {.column width="10%"}
 
 :::
 :::
@@ -476,8 +485,8 @@ select(.data, <column(s)>)
 
 # e.g.
 
-# data %>%
-#   select(column1, column2, column3)
+data %>%
+  select(column1, column2, column3)
 ```
 
 :::
@@ -679,7 +688,8 @@ babynames %>%
 
 :::
 
-## filter()
+## filter() for multiple conditions
+
 
 ::: {style="font-size: 1.4em"}
 
@@ -703,12 +713,16 @@ babynames %>%
 
 a & b         # and
 a | b         # or
-xor(a, b)     # exclusive or (if two values same, returns F)
+xor(a, b)     # exclusive or 
 !a            # not
-( )           # for grouping tests; & evaluates before |
+( )           # for grouping tests; 
+                 # & evaluates before |
 ```
 
 :::
+
+- `xor`: if two entries the same, returns `F`
+- For grouping tests, `&` evaluates before `|`
 
 ## Boolean operators: example
 
@@ -719,7 +733,10 @@ xor(a, b)     # exclusive or (if two values same, returns F)
 #| eval: true
 
 x <- 2.5
-x >=2 & x < 3   # both conditions are true
+x >=2
+x < 3   
+
+x >= 2 & x < 3  # both true
 ```
 
 :::
@@ -1355,7 +1372,12 @@ mpg %>%                             # use mpg data
 ## ggplot2()
 Visualizations can help us continue to explore the data. 
 
-Why do these cars get better mileage?
+Why do cars in upper right of plot get better mileage?
+
+::: {.absolute top="42%" left="4%" width="150"}
+::: {.blackbox}
+:::
+:::
 
 ```{r}
 mpg %>%                             # use mpg data
@@ -1364,7 +1386,7 @@ mpg %>%                             # use mpg data
   geom_point()                      # add points
 ```
 
-Draw circle around the outliers
+
 
 ## Visualize data with ggplot2
 How can we use aesthetics to better tell our story? 
@@ -1655,11 +1677,13 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
 
 ```
 
-## ggplot2 template
+## ggplot2() template
 
 An example of a `ggplot2()` template
 
 ![](images/ggplot_temp.png)
+
+
 ## interactivity
 
 What's different about this plot? Run the code!
@@ -1725,16 +1749,9 @@ ggsave("my-plot.pdf",
        unit = "in")
 ```
 
-## hello
-hello
 
-## R4DS resource
 
-r4ds.had.co.nz
 
-Ultimate resource for all of today!
-
-![](images/r4ds.png)
 # Communicate results with R Markdown
 
 # Modeling data
