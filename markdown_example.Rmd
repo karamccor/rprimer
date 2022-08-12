@@ -11,8 +11,6 @@ library(kableExtra)
 library(table1)
 ```
 
-
-
 The following code shows some things we can do with R Markdown!
 
 ## Load the `mtcars` data
