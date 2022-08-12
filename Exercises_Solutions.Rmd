@@ -1,0 +1,126 @@
+---
+title: "Exercises_Solutions"
+author: "Kara McCormack"
+date: '2022-08-08'
+output: html_document
+---
+
+## Exercise 1
+
+Assign the numbers 3 through 12 to a vector called "a". Print a. 
+
+```{r}
+a <- 3:12
+a
+```
+
+Run the code `a+3`. What happens?
+
+```{r}
+a+3
+```
+
+Find the length of the vector using the `length()` function, and find the mean of the vector using the `mean()` function.
+
+```{r}
+
+```
+
+What will the code `a == 5` return? Think about it first, then run the code. 
+
+```{r}
+
+```
+
+## Exercise 2
+
+Read in the iris_example.csv file using `read_csv`, assigning it to a variable called `dat`. Then print the data. 
+```{r}
+dat <- read_csv("~/school/rprimer/iris_example.csv")
+dat
+```
+
+What is the dimension of "dat"? (Hint: use the `dim()` function). 
+```{r}
+dim(dat)
+```
+
+What are the column names of "dat"? (Hint: use the `colnames()` function). 
+```{r}
+colnames(dat)
+```
+
+
+
+## Exercise 3
+
+Group the babynames dataset by sex and then find out the total number of names for each group. 
+
+```{r}
+babynames %>%
+  group_by(sex) %>%
+  summarize(total = sum(n))
+```
+
+
+## Exercise 4
+
+Group the babynames dataset by name and sex, find the total number of names for each combination, and then arrange the totals from largest to smallest. 
+
+```{r}
+babynames %>%
+  group_by(name, sex) %>% 
+  summarise(total = sum(n)) %>% 
+  arrange(desc(total))
+```
+
+## Exercise 5
+
+Plot the code on the previous slide (creating a barplot showing the top ten most common names), but replacing `x = fct_reorder(name, desc(total))` with `x = name`. What happened? Why is `fct_reorder()` helpful?
+
+```{r}
+babynames %>%
+  group_by(name, sex) %>% 
+  summarise(total = sum(n)) %>% 
+  arrange(desc(total)) %>% 
+  ungroup() %>% 
+  slice(1:10) %>% 
+  ggplot() +
+    geom_col(mapping = aes(x = name, 
+             y = total, fill = sex)) +
+    theme_bw() +
+    scale_fill_brewer() +
+    labs(x = "name")
+```
+
+## Exercise 6
+
+In your groups:
+
+What relationship do you expect to see between engine size (displ) and mileage (hwy)?
+
+We might expect that larger engines can get better mileage. 
+
+## Exercise 7
+
+The labs() function allows us to print a title, subtitle (etc) , and name for the legend. Use `\n` for a new line. 
+
+## Exercise 8
+
+```{r}
+mpg %>%
+  ggplot() +
+  aes(x = class, y = hwy) +
+  geom_boxplot() +
+  ggtitle("Boxplots of class vs mileage (hwy) for US cars")
+```
+
+## Exercise 9
+
+Make a bar chart of `class` below. Use the cheat sheet and/or google. Hint: do not supply a `y` variable. 
+
+```{r}
+mpg %>%
+  ggplot() +
+  geom_bar(aes(x = class, fill = class))
+```

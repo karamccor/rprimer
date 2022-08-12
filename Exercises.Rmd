@@ -1,0 +1,169 @@
+---
+title: "Exercises"
+author: "Kara McCormack"
+date: '2022-08-04'
+output: html_document
+---
+
+```{r echo = F, warning = F, message = F}
+# load libraries
+library(babynames)
+library(tidyverse)
+```
+
+
+## Exercise 1
+
+Assign the numbers 3 through 12 to a vector called "a". Print a. 
+
+```{r}
+a <- 3:12
+a
+```
+
+Run the code `a+3`. What happens?
+
+```{r}
+a+3
+```
+
+Find the length of the vector using the `length()` function, and find the mean of the vector using the `mean()` function.
+
+```{r}
+
+```
+
+What will the code `a == 5` return? Think about it first, then run the code. 
+
+```{r}
+
+```
+
+
+## Exercise 2
+
+1. In your Console, print your working directory. 
+2. Read in the iris_example.csv file using `read_csv(<FULL PATH TO FILE>)`, assigning it to a variable called `dat`. Then print the data.
+
+```{r}
+
+```
+
+
+## Grouping
+
+```{r}
+pollution <- tribble(
+       ~city,   ~size, ~amount,
+  "New York", "large",      23, 
+  "New York", "small",      14, 
+  "London",   "large",      22,
+  "London",   "small",      16, 
+  "Beijing",  "large",     121, 
+  "Beijing",  "small",     56
+)
+```
+
+## Exercise 3
+
+Group the babynames dataset by sex and then find out the total number of names for each group. 
+
+```{r}
+
+```
+
+
+## Exercise 4
+
+Group the babynames dataset by name and sex, find the total number of names for each combination, and then arrange the totals from largest to smallest. 
+
+```{r}
+
+```
+
+## Exercise 5
+
+Plot the code on the previous slide (creating a barplot showing the top ten most common names), but replacing `x = fct_reorder(name, desc(total))` with `x = name`. What happened? Why is `fct_reorder()` helpful?
+
+
+## Exercise 6
+
+In your groups:
+
+What relationship do you expect to see between engine size (displ) and mileage (hwy)?
+
+## Exercise 7
+
+- Among your groups, run the following code in a new chunk. 
+
+- What does each line within the `labs()` function do? 
+
+```{r}
+mpg %>%
+  ggplot(mapping = aes(displ, hwy, color = class)) +
+  geom_point() +
+  labs(title = "Fuel Efficiency by Engine Size",
+       subtitle = "Data facetted by class",
+       x = "Engine Size (displacement in liters)",
+       y = "Fuel Efficiency (MPG)",
+       color = "Class of\nAutomobile",
+       caption = "Data from the EPA")
+```
+
+## Exercise 8
+
+```{r}
+
+```
+
+Change the code for the above plot to produce boxplots instead. Bonus: add an informative title. 
+```{r}
+
+```
+
+## Exercise 9
+
+Make a bar chart of `class` below. Use the cheat sheet and/or google. Hint: do not supply a `y` variable. 
+
+```{r}
+
+```
+
+## Modeling
+
+```{r}
+library(modelr)
+```
+
+```{r}
+wages <- heights %>%
+  filter(income > 0)
+```
+## Exercise 10
+
+Fit the following model: `mod_e <- lm(log(income) ~ education, data = wages)`
+Examine the output. What does it look like?
+```{r}
+
+```
+
+## Exercise 11
+
+Use a pipe to model `log(income)` against `height`. Then use broom and dplyr to extract:
+
+1. The coefficient estimates and their related statistics. 
+
+2. The `adj.r.squared` and `p.value` for the overall model.
+
+```{r}
+
+```
+
+## Exercise 12
+
+Model `log(income)` against `education` and `height` and `sex`. Can you interpret the coefficients?
+
+```{r}
+
+```
+
