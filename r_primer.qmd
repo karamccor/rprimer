@@ -11,6 +11,8 @@ format:
     preview-links: auto
     logo: images/pop_health_logo.png
     css: styles.css
+    execute: 
+      freeze: auto
 resources:
   - demo.pdf
 ---
