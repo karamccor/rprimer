@@ -21,7 +21,7 @@ resources:
 
 **A few notes**
 
--   Slides are available online: <insert link>
+-   Slides are available via Box link: 
 -   Email if there are specific tasks you want to be able to accomplish in R (kem81\@duke.edu)
 -   Some of these slides are adapted from:
     -   [Thomas Mock's Intro to Tidyverse](https://www.youtube.com/watch?v=MKwyauo8nSI&ab_channel=ThomasMock)
@@ -31,16 +31,25 @@ resources:
 
 -   Name
 -   Where are you from?
--   Are you a morning person or a night person and why?
+-   Have you used R before? 
+    - If no, what skills (if any) are you interested in learning?
+    - If yes, any skills you're looking to review/refresh?
 
-## Setup
+## Setup: Part 1
 
-1. Open RStudio.
-2. Check out the example .html file. This is a sneak peek at what we will learn in this primer. 
-2. Open the Exercises.Rmd file in RStudio
-3. In the Console, type `install.packages("tidyverse")` and then Enter. 
+1. Create a new project in RStudio, called RPrimer2022.
+2. Download example_markdown.Rmd from the box folder, and move it into your RPrimer2022 folder. (You should see it now in your Files pane).  
+3. Open the markdown_example.Rmd file. 
+4. Install packages that are not yet installed. 
+5. Click "Knit > Knit to HTML"
 
-4. Run the first code chunk (the one that starts with `# load libraries`) in the .Rmd file by clicking on the green arrow at the top right of the chunk. 
+This is a sneak peek at *some* of what we will learn in the R Primer. 
+
+## Setup: Part 2
+
+5. Download the Exercises.Rmd file from Box, move to RPrimer2022 folder. 
+6. Open the Exercises.Rmd file.
+7. Run the first code chunk (the one that starts with `# load libraries`) in the .Rmd file by clicking on the green arrow at the top right of the chunk. 
 
 ## Outline
 
@@ -115,6 +124,17 @@ library(tidyverse)
 - Add comments with the `#`
 
 
+## Objects in R
+
+- R is an object-oriented programming language
+    - Objects can be very complex (e.g. output from a regression analysis) or very simple (e.g. a matrix). 
+    
+- In their simplest form, you can think of objects as
+    - Container + element
+    - Example: 
+        - Container = Matrix
+        - Element = Numbers
+        - Object = Numeric Matrix
 
 ## R is a functional language
 
@@ -134,6 +154,96 @@ library(tidyverse)
 possible homework about data structures:
 https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/
 :::
+
+## R Objects
+
+- Data Objects / Structures
+    - Scalars
+    - Vectors
+    - Matrices
+    - Arrays
+    - Data Frames
+    - Lists
+
+## Example: Scalars (a single element)
+
+Numeric, character, and logical are three of the "modes" used in R, and the ones we will most commonly work with. 
+```{r}
+#| echo: true
+#| eval: true
+s1 <- 2     # numeric
+s2 <- "Hi!" # character
+s3 <- TRUE  # logical
+```
+
+```{r}
+s1  # numeric
+s2  # character
+s3  # logical
+```
+
+## Vectors (stacks of scalars)
+
+`rep` creates a vector of values: first input is the value, and second input is how many times to repeat. 
+
+`seq` creates a sequence of values: first input is start, second input is end value, then specify `by = ` for the increment length. 
+
+::: {style="font-size: 1.2em; text-align: center"}
+```{r}
+#| echo: true
+a <- rep(1, 4)
+b <- seq(1, 2, by = .2)
+a
+b
+c <- c(a, b)
+c
+```
+:::
+
+## Matrices (stacks of vectors)
+Created using the R function `matrix()`
+
+```{r}
+#| echo: true
+#| eval: false
+matrix(data, nrow, ncol, 
+       byrow = FALSE, dimnames)
+```
+
+
+```{r}
+#| echo: true
+M1 <- matrix(1:6, 3, 2)
+M2 <- matrix(1:6, 3, 2, byrow = TRUE)
+```
+
+```{r}
+#| echo: false
+M1
+M2
+```
+
+## Data frames
+Allow you to combine vectors of different modes together to create a dataset (essentially a matrix)
+  - Create using the R function `data.frame()`
+
+```{r}
+#| echo: true
+#| eval: false
+data.frame(data, ...)
+```
+
+## Example: data frames
+
+```{r}
+#| echo: true
+#| eval: true
+num <- 1:4
+chr <- c("M", "F", "F", "M")
+log <- c(TRUE, TRUE, FALSE, TRUE)
+D1 <- data.frame(num, chr, log)
+D1
+```
 
 ## Example: round function
 
@@ -223,6 +333,10 @@ c < d            # compare each value
 ```
 :::
 
+## Your turn!
+
+In your groups, open the "Exercises.Rmd" file, and complete Exercise 1. 
+
 # R Packages
 
 ## Functions and packages
@@ -285,6 +399,13 @@ c < d            # compare each value
 
 # Tidyverse
 
+## Programming pattern
+
+In data analysis projects, will likely go through the following steps. Each step is quite important to a successful analysis. 
+
+![](images/tidyprogram.png)
+
+
 ## Tidyverse
 
 ::: columns
@@ -300,11 +421,6 @@ c < d            # compare each value
 ::: {.column width="40%"}
 
 - A collection of R packages developed by H. Wickham and others at RStudio. 
-- Online reference for cheat sheets:
-
-  - [rstudio.cloud/learn/cheat-sheets](rstudio.cloud/learn/cheat-sheets)
-
-  - Click cheat sheets in sidebar
 
 
 :::
@@ -312,7 +428,7 @@ c < d            # compare each value
 
 ## Tidyverse
 
-tidyverse.org
+[tidyverse.org](tidyverse.org)
 
 ![](images/tidy.png)
 
@@ -410,20 +526,17 @@ install.packages("tidyverse")
 
 - This code does the equivalent of that on the previous slide
 
-## Programming pattern
-
-
-![](images/tidyprogram.png)
-
 
 ## Tidy data
 
+- Tidyverse is based on a type of organization called "tidy data"
 - Main characteristics of tidy data
 
   - each variable is a column
   - each observation is a row
   - each value is a different cell
-  
+
+- Having this setup allows the functions of tidyverse to work together coherently from one step to the next in your programming pattern. 
 
 ![](images/tidydata.png)
 
@@ -431,7 +544,7 @@ install.packages("tidyverse")
 
 ## Reading in data: point and click
 
- - Import dataset from test (readr)
+ - Environment pane: Import dataset from test (readr)
 
 ![](images/import1.png)
 
@@ -454,9 +567,15 @@ data <- read_csv(<PATH TO DATA>)
 data
 ```
 
-## Exercise 1
+## Exercise 2
 
-Read in the iris_example.csv file using `read_csv`, assigning it to a variable called `dat`. Then print the data. 
+The iris dataset gives the measurements in centimeters of the variables sepal length and petal length and width, respectively, for 50 flowers from each of 3 species of iris. 
+
+In your groups, complete Exercise 2. 
+
+1. Read in the iris_example.csv file using `read_csv(<FILE NAME>)`, assigning it to a variable called `dat`. Then print the data.
+
+(Note that if you are NOT working in a Project, you would have to list the full path to the file within the `read_csv()` command). 
 
 # Transform data with dplyr
 
@@ -498,6 +617,8 @@ data %>%
 
 ## select(): example
 
+The "babynames" dataset (from R package "babynames") from the US government gives baby names and frequency by year, according to Social Security card applications. 
+
 ```{r}
 #| echo: false
 #| eval: true
@@ -535,24 +656,26 @@ babynames %>%
  
 ## select(): helper functions
 
-Can also select variables with helper functions.
+"mpg" dataset (from package "ggplot2") gives fuel economy data from 1999 to 2008 for 30 popular models of cars. 
 
-::: {style="font-size: 1.4em"}
+Select all columns that fall between 'cty'= city miles per gallon and 'class' = "type" of car (inclusive). 
 
 ```{r}
 #| echo: true
 #| eval: true
-
+colnames(mpg)
 mpg %>%
   select(cty:class)
-
 ```
 
-:::
 
 ## select(): helper functions
 
-::: {style="font-size: 1.4em"}
+Can also select variables with helper functions.
+
+Using the `-` selects all variables *except* those listed
+
+::: {style="font-size: 1.2em"}
 ```{r}
 #| echo: true
 #| eval: true
@@ -562,6 +685,8 @@ mpg %>%
 :::
 
 ## select(): helper functions
+
+Select all variables starting with the letter "c". 
 
 ::: {style="font-size: 1.4em"}
 ```{r}
@@ -574,6 +699,7 @@ mpg %>%
 
 ## select(): helper functions
 
+Select all variables ending with the letter "y". 
 ::: {style="font-size: 1.4em"}
 ```{r}
 #| echo: true
@@ -606,6 +732,8 @@ a tibble is similar to a data frame. two key differences are 1) how they are pri
 :::
 
 ## filter(): example
+
+Filter to all observations (rows) with the name "Garrett". 
 
 ::: {style="font-size: 1.4em"}
 ```{r}
@@ -772,7 +900,7 @@ babynames %>%
 ```
 :::
  
-## More ommon mistakes
+## More common mistakes
 
 3. Collapsing multiple tests into one
 
@@ -816,6 +944,10 @@ babynames %>%
 ```
 
 :::
+
+## Your turn!
+
+In your groups, complete Exercise 3. 
 
 ## arrange()
 Order data from smallest to largest values
@@ -1107,6 +1239,7 @@ pollution  %>%
 
 - This summary finds the overall mean, the overall sum, and the overall number of observations. 
 - Not quite what we want...
+- Would be better to get these values within certain groups (e.g. for each city)
 
 ## group_by()
 
@@ -1121,6 +1254,7 @@ pollution  %>%
 ```
 :::
 
+Note that the `group_by()` function didn't change the data at all, but R lets us know that the data are now grouped by city. 
 ## group_by()
 
 - Same code as before, but first grouping by city
@@ -1161,7 +1295,25 @@ pollution  %>%
 ```
 :::
 
-## Exercise 3
+## group_by()
+
+We would get original dataset back, since there is only one observation for each city and size combination! 
+
+:::{style="font-size: 1.4em"}
+```{r }
+#| echo: true
+#| eval: true
+pollution  %>%
+  group_by(city, size) %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+:::
+
+## Exercise 4
+
+In your groups, complete Exercise 4. 
 
 Group the `babynames` dataset by sex and then find out the total number of names for each group. 
 
@@ -1180,11 +1332,13 @@ babynames  %>%
 ```
 :::
 
-## Exercise 4
+## Exercise 5
 
 Group the `babynames` dataset by name and sex, find the total number of names for each combination, and then arrange the totals from largest to smallest. 
 
 ## plotting groups
+
+Plotting the top 10 most common names
 
 ```{r }
 #| echo: false
@@ -1205,7 +1359,7 @@ babynames %>%
 
 ## plotting groups
 
-Review the following code, then complete Exercise 5. 
+Review the following code, then complete Exercise 6. 
 
 ```{r }
 #| echo: true
