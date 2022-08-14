@@ -50,6 +50,29 @@ What will the code `a == 5` return? Think about it first, then run the code.
 ```
 
 
+
+## Exercise 3
+
+1. Filter the babynames dataset based on the following criteria: 
+  - name is Jessica AND year is 2001
+```{r}
+babynames %>%
+  filter(name == "Jessica" & year == 2001)
+```
+
+2. Filter the babynames dataset to the following names: Anna, Alice, or Sarah. 
+```{r}
+babynames %>%
+  filter(name %in% c("Anna", "Alice", "Sarah"))
+```
+
+3. Filter the mpg dataset to cars getting at least 19 city miles per gallon and at least 30 highway miles per gallon.
+```{r}
+mpg %>%
+  filter(cty >= 19 & hwy >= 30)
+```
+
+
 ## Grouping
 
 ```{r}
@@ -64,7 +87,7 @@ pollution <- tribble(
 )
 ```
 
-## Exercise 3
+## Exercise 4
 
 Group the babynames dataset by sex and then find out the total number of names for each group. 
 
@@ -73,7 +96,7 @@ Group the babynames dataset by sex and then find out the total number of names f
 ```
 
 
-## Exercise 4
+## Exercise 5
 
 Group the babynames dataset by name and sex, find the total number of names for each combination, and then arrange the totals from largest to smallest. 
 
@@ -81,7 +104,7 @@ Group the babynames dataset by name and sex, find the total number of names for 
 
 ```
 
-## Exercise 5
+## Exercise 6
 
 Plot the code on the previous slide (creating a barplot showing the top ten most common names), but replacing `x = fct_reorder(name, desc(total))` with `x = name`. What happened? Why is `fct_reorder()` helpful?
 
@@ -142,7 +165,7 @@ wages <- heights %>%
 ## Exercise 10
 
 Fit the following model: `mod_e <- lm(log(income) ~ education, data = wages)`
-Examine the output. What does it look like?
+Examine the output. What does it look like? Use the `summary` function to look at the full output of the model. 
 ```{r}
 
 ```
