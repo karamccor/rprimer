@@ -1,0 +1,662 @@
+---
+title: "05_class_code"
+author: "Kara McCormack"
+date: "2022-08-16"
+output: html_document
+---
+
+```{r setup}
+library(tidyverse)
+library(babynames)
+library(plotly)
+library(modelr)
+library(broom)
+```
+
+
+### Slide 41: Some math
+
+```{r}
+5 + 7
+3.14*3
+```
+
+### Slide 43: R is a functional language
+```{r}
+3
+"California"
+"2015-03-07"
+
+x <- c(5/6, 0.83, 7)
+round(x, digits = 3)
+```
+
+### Slide 45: Example: Scalars
+```{r}
+s1 <- 2       # numeric
+s2 <- "Hi!"   # character
+s3 <- TRUE    # logical
+
+s1
+s2
+s3
+```
+
+### Slide 46: Vectors (stacks of scalars)
+
+```{r}
+a <- rep(1,4)
+b <- seq(1, 2, by = .2)
+a
+b
+c <- c(a, b)
+d <- 1:4
+d
+```
+
+### Slide 47: Matrices (stacks of vectors)
+
+```{r}
+M1 <- matrix(1:6, 3, 2)
+M2 <- matrix(1:6, 3, 2, byrow = TRUE)
+
+M1
+M2
+```
+
+### Slide 49: Example: data frames
+
+```{r}
+num <- 1:4
+chr <- c("M", "F", "F", "M")
+log <- c(TRUE, TRUE, FALSE, TRUE)
+D1 <- data.frame(num, chr, log)
+D1
+```
+
+### Slide 50: Example: vectorization
+
+```{r}
+a <- c(1, 2, 3)
+b <- c(3, 4, 5)
+a + b
+a * b
+```
+
+### Slide 51: Example: vectorization
+
+```{r}
+a <- c(1, 2, 3)
+b <- c(3, 4)
+a+b  # warning message since a and b are different lengths
+```
+
+### Slide 52: Example: functions
+
+```{r}
+values <- c(1:10, 17)
+print(values)
+mean(values)
+median(values)
+sd(values)
+```
+
+
+### Slide 54: Example
+
+```{r}
+c <- 1:5
+d <- c(0, 1, 7, 7, 7)
+c < d
+c == d
+```
+
+### Slide 72: Example
+
+```{r}
+# example_data <- read_csv("04_data.csv")
+# example_data
+
+# change to your working directory if not in project folder
+```
+
+### Slide 77: select(): example
+
+```{r}
+select(babynames, name, prop)
+```
+
+### Slide 78: select(): example with pipe
+
+```{r}
+babynames %>%
+  select(name, prop)
+```
+
+### Slide 79: select(): helper functions
+
+```{r}
+colnames(mpg)
+mpg %>%
+  select(cty:class)
+```
+
+### Slide 80: select(): helper functions
+
+```{r}
+mpg %>%
+  select(-c(cty, hwy))
+```
+
+### Slide 81: select(): helper functions
+
+```{r}
+mpg %>%
+  select(starts_with("c"))
+```
+
+### Slide 82: select(): helper functions
+
+```{r}
+mpg %>%
+  select(ends_with("y"))
+```
+
+### Slide 84: filter(): example
+
+```{r}
+babynames %>%
+  filter(name == "Garrett")
+```
+
+### Slide 86: Two common mistakes
+
+```{r}
+# using = instead of ==
+# babynames %>%
+#   filter(name = "Sea")      # incorrect
+
+babynames %>%
+  filter(name == "Sea")     # correct
+
+# forgetting quotes
+# babynames %>%
+#   filter(name = Sea)      # incorrect
+
+babynames %>%
+  filter(name == "Sea")     # correct
+```
+
+### Slide 87: filter()
+
+```{r}
+babynames %>%
+  filter(name == "Garrett", year == 1880)
+```
+
+### Slide 88: filter() for multiple conditions
+
+```{r}
+babynames %>%
+  filter(name == "Garrett" & year == 1880)
+```
+
+### Slide 90: Boolean operators: example
+
+```{r}
+x <- 2.5
+x >=2
+x < 3
+x >= 2 & x < 3
+x != 5
+```
+
+### Slide 91: filter() with conditions
+
+```{r}
+babynames %>%
+  filter(name == "Sue", sex == "M")
+```
+
+### Slide 92: filter() with conditions
+
+```{r}
+babynames %>%
+  filter((n == 5 | n == 6) & year == 1880)
+```
+
+### Slide 93: More common mistakes
+
+```{r}
+# babynames %>%
+#   filter(10 < n < 20)    # error
+
+babynames %>%
+  filter(10 < n, n < 20) # correct
+```
+
+### Slide 94: More common mistakes
+
+```{r}
+# will run, just not efficient
+babynames %>%
+  filter(n == 5 | n ==6 | n == 7 | n == 8) 
+
+# better
+babynames %>%
+  filter(n %in% c(5, 6, 7, 8))
+
+# or, alternatively:
+vec <- 5:8
+babynames %>%
+  filter(n %in% vec)
+```
+
+### Slide 96: arrange()
+
+```{r}
+babynames %>%
+  arrange(n)
+```
+
+### Slide 97: arrange()
+
+```{r}
+babynames %>%
+  arrange(desc(n))
+```
+
+### Slide 98: Performing multiple steps
+
+```{r}
+boys_2015 <- babynames %>% filter(year == 2015, sex == "M")
+boys_2015 <- boys_2015 %>% select(name, n)
+boys_2015 <- boys_2015 %>% arrange(desc(n))
+boys_2015
+```
+
+### Slide 99: Performing multiple steps: nesting functions
+
+```{r}
+# not recommended
+arrange(select(filter(babynames, year == 2015, sex == "M"), name, n), desc(n))
+```
+
+### Slide 100: Performing multiple steps: piping each step
+
+```{r}
+babynames %>%
+  filter(year == 2015, sex == "M") %>%
+  select(name, n) %>%
+  arrange(desc(n))
+```
+
+### Slide 101: What if we wanted to visualize
+
+```{r}
+babynames %>%
+  filter(name == "Garrett", sex == "M") %>%
+  select(year, prop) %>%
+  ggplot() +
+  geom_line(mapping = aes(year, prop))
+```
+
+
+### Slide 103: Plotting groups
+
+```{r}
+babynames %>%
+  filter(name == "Michael") %>%
+  ggplot() +
+  geom_point(mapping = aes(year, prop))
+```
+
+### Slide 104: Plotting groups, adding in color
+
+```{r}
+babynames %>%
+  filter(name == "Michael") %>%
+  ggplot() +
+  geom_line(mapping = aes(year, prop, color = sex))
+```
+
+### Slide 105: Plotting with facet_wrap()
+
+```{r}
+babynames %>%
+  filter(name == "Michael") %>%
+  ggplot() +
+  geom_line(mapping = aes(year, prop)) +
+  facet_wrap(~sex)
+```
+
+### Slide 107: summarize()
+
+```{r}
+babynames %>%
+  head(3)
+
+babynames %>%
+  summarize(total = sum(n), max = max(n))
+```
+
+### Slide 108: n()
+
+```{r}
+babynames %>%
+  head(3)
+
+babynames %>%
+  summarize(n = n())
+```
+
+### Slide 109: n_distinct()
+
+```{r}
+babynames %>%
+  head(3)
+
+babynames %>%
+  summarize(n = n(), nname = n_distinct(name))
+```
+
+### Slide 111: Name popularity example: Khaleesi
+
+```{r}
+babynames %>%
+  filter(name == "Khaleesi" & sex == "F")
+```
+
+### Slide 112: Name popularity example: Khaleesi
+
+```{r}
+babynames %>%
+  filter(name == "Khaleesi" & sex == "F") %>%
+  summarize(total = sum(n))
+```
+
+### Slide 114: Grouping cases
+
+```{r}
+pollution <- tribble(
+       ~city,   ~size, ~amount,
+  "New York", "large",      23, 
+  "New York", "small",      14, 
+  "London",   "large",      22,
+  "London",   "small",      16, 
+  "Beijing",  "large",     121, 
+  "Beijing",  "small",     56
+)
+```
+
+### Slide 115: grouping
+
+```{r}
+pollution %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+
+### Slide 116: group_by()
+
+```{r}
+pollution %>%
+  group_by(city)
+```
+
+### Slide 117: group_by()
+
+```{r}
+pollution %>%
+  group_by(city) %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+
+### Slide 118: group_by()
+
+```{r}
+pollution %>%
+  group_by(city, size) %>%
+  summarize(mean = mean(amount), 
+            sum = sum(amount), 
+            n = n())
+```
+
+### Slide 121: ungroup()
+
+```{r}
+babynames %>%
+  group_by(sex) %>%
+  ungroup() %>%
+  summarize(total = sum(n))
+```
+
+### Slide 125: Visualizing the number of children over time
+
+```{r}
+babynames %>%
+  group_by(year) %>%
+  summarize(n_children = sum(n)) %>%
+  ggplot() +
+  geom_line(mapping = aes(x= year, y = n_children))
+```
+
+### Slide 127: mutate()
+
+```{r}
+babynames %>%
+  mutate(percent = round(prop*100, 2))
+```
+
+### Slide 128: mutate()
+
+```{r}
+babynames %>%
+  mutate(percent = round(prop*100, 2), 
+         nper = round(percent))
+```
+
+### Slide 133: Data exploration: mpg
+
+```{r}
+mpg
+```
+
+### Slide 138: Visualize data with ggplot2
+
+```{r}
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, color = class))
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, size = class))
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, shape = class))
+ggplot(mpg) + geom_point(aes(x = displ, y = hwy, alpha = class))
+```
+
+### Slide 140: Visualize data with ggplot2
+
+```{r}
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+```
+
+### Slide 142: facets
+
+```{r}
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy, color = class)) +
+  geom_point() +
+  facet_wrap(~class)
+```
+
+### Slide 154: filling with a new variable
+
+```{r}
+mpg %>%
+  ggplot() +
+  geom_bar(aes(x = class, fill = drv))
+```
+
+
+### Slide 155-156: stacking layers
+
+```{r}
+mpg %>%
+  ggplot() +
+  geom_point(aes(displ, hwy)) +
+  geom_smooth(aes(displ, hwy))
+```
+
+### Slide 158: changing colors for different geom layers
+```{r}
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth()
+```
+
+### Slide 159: global vs. local 
+```{r}
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(data = filter(mpg, drv == "r"))
+```
+
+### Slide 162-163: interactivity
+```{r}
+p <- ggplot(mpg) +
+  geom_point(aes(displ, hwy)) +
+  geom_smooth(aes(displ, hwy))
+
+# library(plotly)
+ggplotly(p)
+```
+
+### Slide 176: Modeling example dataset from modelr package
+```{r}
+wages <- heights %>%
+  filter(income > 0 )
+```
+
+### Slide 177: wages dataset
+```{r}
+wages %>%
+  slice(1:6) %>%
+  knitr::kable()
+```
+
+### Slide 178: wages dataset (continued)
+```{r}
+wages %>%
+  ggplot(aes(income)) +
+  geom_histogram()
+```
+
+### Slide 179: wages data: log transformation
+```{r}
+wages %>%
+  ggplot(aes(income)) +
+  geom_histogram(binwidth = 0.25)
+```
+
+### Slide 181: lm()
+```{r}
+lm(log(income) ~ education, data = wages)
+```
+
+### Slide 184: .
+```{r}
+mod_e <- wages %>%
+  lm(log(income) ~ education, data = .)
+```
+
+### Slide 187: tidy()
+```{r}
+mod_e <- wages %>%
+  lm(log(income) ~ education, data = .)
+mod_e %>%
+  tidy()
+```
+
+### Slide 188: glance()
+```{r}
+mod_e %>%
+  glance()
+```
+
+### Slide 189: augment()
+```{r}
+mod_e %>%
+  augment()
+```
+
+### Slide 192: comparing models
+```{r}
+# running model from previous exercise
+mod_h <- wages %>%
+  lm(log(income) ~ height, data = .)
+
+mod_h %>%
+  tidy() %>%
+  filter(p.value < 0.05)
+
+mod_e %>%
+  tidy() %>%
+  filter(p.value < 0.05)
+```
+
+### Slide 194: multivariate regression
+```{r}
+log(income) ~ education + height
+```
+
+### Slide 195: modeling education and height
+```{r}
+mod_eh <- wages %>%
+  lm(log(income) ~ education + height, data = .)
+mod_eh %>%
+  tidy()
+```
+
+
+### Slide 200: model visualization
+```{r}
+wages %>%
+  ggplot(aes(x = height, y = log(income))) +
+  geom_point(alpha = 0.1) +
+  geom_smooth(method = lm)      # fits y ~ x (mod_h)
+```
+
+### Slide 203: add_predictions() for height lm
+```{r}
+wages %>%
+  add_predictions(mod_h)
+```
+
+
+### Slide 205: add_residuals()
+```{r}
+wages %>%
+  add_residuals(mod_h)
+```
+
+
+### Slide 209: spread_residuals()
+```{r}
+# mod_ehs from Exercise 13
+mod_ehs <- wages %>%
+  lm(log(income) ~ education + height + sex, data = .)
+wages %>%
+  spread_residuals(mod_h, mod_eh, mod_ehs)
+```
+
+### Slide 211: gather_residuals()
+```{r}
+# mod_ehs from Exercise 13
+wages %>%
+  gather_residuals(mod_h, mod_eh, mod_ehs) %>%
+  arrange(income, height)
+```
