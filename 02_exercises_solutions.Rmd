@@ -194,6 +194,8 @@ mpg %>%
 Fit the following model: `mod_e <- lm(log(income) ~ education, data = wages)`
 Examine the output. What does it look like? Use the `summary` function to look at the full output of the model. 
 ```{r}
+wages <- heights %>%
+  filter(income > 0)
 mod_e <- lm(log(income) ~ education, data = wages)
 
 summary(mod_e)
@@ -232,4 +234,15 @@ mod_ehs %>%
   tidy()
 ```
 
+## Exercise 14
 
+Use `add_predictions()` to create the plot on the slide, using the results from mod_ehs.
+[Hint: First save the data frame with the residuals to an object called plot_dat, then use ggplot on plot_dat.]
+
+```{r}
+wages %>% 
+  add_predictions(mod_ehs) %>% 
+  ggplot(mapping = aes(x = height, y = pred, color = sex)) +
+    geom_line() +
+    facet_wrap(~ education)
+```

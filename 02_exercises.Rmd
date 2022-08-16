@@ -170,7 +170,6 @@ Make a bar chart of `class` below. Use the cheat sheet and/or google. Hint: do n
 ## Modeling
 
 ```{r}
-
 wages <- heights %>%
   filter(income > 0)
 ```
@@ -214,10 +213,6 @@ Use `add_predictions()` to create the plot on the slide, using the results from 
 [Hint: First save the data frame with the residuals to an object called plot_dat, then use ggplot on plot_dat.]
 
 ```{r}
-wages %>% 
-  add_predictions(mod_ehs) %>% 
-  ggplot(mapping = aes(x = height, y = pred, color = sex)) +
-    geom_line() +
-    facet_wrap(~ education)
+
 ```
 
