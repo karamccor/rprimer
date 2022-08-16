@@ -9,6 +9,7 @@ output: html_document
 library(tidyverse)
 library(kableExtra)
 library(table1)
+library(babynames)
 ```
 
 The following code shows some things we can do with R Markdown!

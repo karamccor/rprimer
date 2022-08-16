@@ -5,26 +5,26 @@ date: '2022-08-04'
 output: html_document
 ---
 
-```{r echo = F, warning = F, message = F}
+```{r setup, echo = F, warning = F, message = F}
 # load libraries
 library(babynames)
 library(tidyverse)
+library(modelr)
+library(broom)
 ```
-
 
 ## Exercise 1
 
-Assign the numbers 3 through 12 to a vector called "a". Print a. 
+Assign the numbers 3 through 12 to a vector called "a". Print the contents of a. 
 
 ```{r}
-a <- 3:12
-a
+
 ```
 
 Run the code `a+3`. What happens?
 
 ```{r}
-a+3
+
 ```
 
 Find the length of the vector using the `length()` function, and find the mean of the vector using the `mean()` function.
@@ -42,34 +42,37 @@ What will the code `a == 5` return? Think about it first, then run the code.
 
 ## Exercise 2
 
-1. In your Console, print your working directory. 
-2. Read in the iris_example.csv file using `read_csv(<FULL PATH TO FILE>)`, assigning it to a variable called `dat`. Then print the data.
-
+1. Read in the 03_iris_example.csv file using `read_csv(<FULL PATH TO FILE>)`, assigning it to a variable called `dat`. Then print the data.
 ```{r}
 
 ```
 
+3. What is the dimension of "dat"? (Hint: use the `dim()` function). 
+```{r}
 
+```
+
+4. What are the column names of "dat"? (Hint: use the `colnames()` function). 
+```{r}
+
+```
 
 ## Exercise 3
 
 1. Filter the babynames dataset based on the following criteria: 
   - name is Jessica AND year is 2001
 ```{r}
-babynames %>%
-  filter(name == "Jessica" & year == 2001)
+
 ```
 
 2. Filter the babynames dataset to the following names: Anna, Alice, or Sarah. 
 ```{r}
-babynames %>%
-  filter(name %in% c("Anna", "Alice", "Sarah"))
+
 ```
 
 3. Filter the mpg dataset to cars getting at least 19 city miles per gallon and at least 30 highway miles per gallon.
 ```{r}
-mpg %>%
-  filter(cty >= 19 & hwy >= 30)
+
 ```
 
 
@@ -106,22 +109,28 @@ Group the babynames dataset by name and sex, find the total number of names for 
 
 ## Exercise 6
 
-Plot the code on the previous slide (creating a barplot showing the top ten most common names), but replacing `x = fct_reorder(name, desc(total))` with `x = name`. What happened? Why is `fct_reorder()` helpful?
+Run the code on the slide (creating a barplot showing the top ten most common names), but replacing `x = fct_reorder(name, desc(total))` with `x = name`. What happened? Why is `fct_reorder()` helpful?
+```{r}
 
-
-## Exercise 6
-
-In your groups:
-
-What relationship do you expect to see between engine size (displ) and mileage (hwy)?
+```
 
 ## Exercise 7
+
+What relationship do you expect to see between engine size (displ) and mileage (hwy)? Run the following code to explore this relationship. What do you see?
+```{r}
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point()  
+```
+
+
+## Exercise 8
 
 - Among your groups, run the following code in a new chunk. 
 
 - What does each line within the `labs()` function do? 
 
-```{r}
+```{r }
 mpg %>%
   ggplot(mapping = aes(displ, hwy, color = class)) +
   geom_point() +
@@ -133,18 +142,24 @@ mpg %>%
        caption = "Data from the EPA")
 ```
 
-## Exercise 8
-
-```{r}
-
-```
-
-Change the code for the above plot to produce boxplots instead. Bonus: add an informative title. 
-```{r}
-
-```
-
 ## Exercise 9
+
+Run the code provided to produce the plot on the slide.
+
+```{r}
+mpg %>%
+  ggplot() +
+  aes(x = class, y = hwy) +
+  geom_point() +
+  ggtitle("Boxplots of class vs mileage (hwy) for US cars")
+```
+
+Change the code for the above plot to produce boxplots instead. Bonus: add an informative title to the plot. 
+```{r}
+
+```
+
+## Exercise 10
 
 Make a bar chart of `class` below. Use the cheat sheet and/or google. Hint: do not supply a `y` variable. 
 
@@ -155,14 +170,17 @@ Make a bar chart of `class` below. Use the cheat sheet and/or google. Hint: do n
 ## Modeling
 
 ```{r}
-library(modelr)
-```
 
-```{r}
 wages <- heights %>%
   filter(income > 0)
 ```
-## Exercise 10
+
+```{r}
+wages %>%
+  slice(1:6)
+```
+
+## Exercise 11
 
 Fit the following model: `mod_e <- lm(log(income) ~ education, data = wages)`
 Examine the output. What does it look like? Use the `summary` function to look at the full output of the model. 
@@ -170,7 +188,7 @@ Examine the output. What does it look like? Use the `summary` function to look a
 
 ```
 
-## Exercise 11
+## Exercise 12
 
 Use a pipe to model `log(income)` against `height`. Then use broom and dplyr to extract:
 
@@ -182,11 +200,24 @@ Use a pipe to model `log(income)` against `height`. Then use broom and dplyr to 
 
 ```
 
-## Exercise 12
+## Exercise 13
 
 Model `log(income)` against `education` and `height` and `sex`. Can you interpret the coefficients?
 
 ```{r}
 
+```
+
+## Exercise 14
+
+Use `add_predictions()` to create the plot on the slide, using the results from mod_ehs.
+[Hint: First save the data frame with the residuals to an object called plot_dat, then use ggplot on plot_dat.]
+
+```{r}
+wages %>% 
+  add_predictions(mod_ehs) %>% 
+  ggplot(mapping = aes(x = height, y = pred, color = sex)) +
+    geom_line() +
+    facet_wrap(~ education)
 ```
 
