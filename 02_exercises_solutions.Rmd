@@ -1,0 +1,235 @@
+---
+title: "Exercises_Solutions"
+author: "Kara McCormack"
+date: '2022-08-08'
+output: html_document
+---
+
+```{r echo = F, message = F, warning = F}
+# load libraries
+library(babynames)
+library(tidyverse)
+library(modelr)
+library(broom)
+```
+
+## Exercise 1
+
+Assign the numbers 3 through 12 to a vector called "a". Print the contents of a. 
+
+```{r}
+a <- 3:12
+a
+```
+
+Run the code `a+3`. What happens?
+
+```{r}
+a+3
+```
+Answer: 3 is added to each entry of a. 
+
+Find the length of the vector using the `length()` function, and find the mean of the vector using the `mean()` function.
+
+```{r}
+length(a)
+mean(a)
+```
+
+What will the code `a == 5` return? Think about it first, then run the code. 
+
+```{r}
+a == 5
+```
+Answer: The code `a==5` is going entry by entry to check the conditional statement, "Is this entry of a equal to 5?" Since only one of those statements will be true (i.e., the third entry of a is 5), the third condition will be `TRUE`. The rest are `FALSE`. 
+
+## Exercise 2
+
+2. Read in the iris_example.csv file using `read_csv(<FILE NAME>)`, assigning it to a variable called `dat`. Then print the data.
+```{r}
+dat <- read_csv("03_iris_example.csv")
+dat
+```
+
+Answer: If we are using Projects, then the working directory will already point to the 'RPrimer2022' folder by default. In this case, we can read in the dataset with only the file name. If we are not using projects, then you'll need to specify the entire path to the file. For example, mine would be: `dat <- read_csv("~/schoool/RPrimer2022/iris_example.csv")`
+
+
+What is the dimension of "dat"? (Hint: use the `dim()` function). 
+```{r}
+dim(dat)
+```
+
+What are the column names of "dat"? (Hint: use the `colnames()` function). 
+```{r}
+colnames(dat)
+```
+
+
+## Exercise 3
+
+1. Filter the babynames dataset based on the following criteria: 
+  - name is Jessica AND year is 2001
+```{r}
+babynames %>%
+  filter(name == "Jessica" & year == 2001)
+```
+
+2. Filter the babynames dataset to the following names: Anna, Alice, or Sarah. 
+```{r}
+babynames %>%
+  filter(name %in% c("Anna", "Alice", "Sarah"))
+```
+
+3. Filter the mpg dataset to cars getting at least 19 city miles per gallon and at least 30 highway miles per gallon.
+```{r}
+mpg %>%
+  filter(cty >= 19 & hwy >= 30)
+```
+
+## Exercise 4
+
+Group the babynames dataset by sex and then find out the total number of names for each group. 
+
+```{r}
+babynames %>%
+  group_by(sex) %>%
+  summarize(total = sum(n))
+```
+
+
+## Exercise 5
+
+Group the babynames dataset by name and sex, find the total number of names for each combination, and then arrange the totals from largest to smallest. 
+
+```{r}
+babynames %>%
+  group_by(name, sex) %>% 
+  summarise(total = sum(n)) %>% 
+  arrange(desc(total))
+```
+
+## Exercise 6
+
+Go through each of the lines of the code on the previous slide, noting what each line does. 
+Plot the code on the previous slide (creating a barplot showing the top ten most common names), but replacing `x = fct_reorder(name, desc(total))` with `x = name`. What happened? Why is `fct_reorder()` helpful?
+
+```{r}
+babynames %>%
+  group_by(name, sex) %>% 
+  summarise(total = sum(n)) %>% 
+  arrange(desc(total)) %>% 
+  ungroup() %>% 
+  slice(1:10) %>% 
+  ggplot() +
+    geom_col(mapping = aes(x = name, 
+             y = total, fill = sex)) +
+    theme_bw() +
+    scale_fill_brewer() +
+    labs(x = "name")
+```
+
+`fct_reorder` helps us reorder the names according to their descending order. This way, the barplot goes from most popular name to least popular. 
+
+## Exercise 7
+
+In your groups:
+
+What relationship do you expect to see between engine size (displ) and mileage (hwy)?
+
+We might expect that larger engines can get better mileage. 
+
+```{r}
+mpg %>%
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point()  
+```
+
+
+## Exercise 8
+
+```{r}
+mpg %>%
+  ggplot(mapping = aes(displ, hwy, color = class)) +
+  geom_point() +
+  labs(title = "Fuel Efficiency by Engine Size",
+       subtitle = "Data facetted by class",
+       x = "Engine Size (displacement in liters)",
+       y = "Fuel Efficiency (MPG)",
+       color = "Class of\nAutomobile",
+       caption = "Data from the EPA")
+```
+
+The labs() function allows us to print a title, subtitle (etc) , and name for the legend. Use `\n` for a new line. 
+
+## Exercise 9
+
+```{r}
+mpg %>%
+  ggplot() +
+  aes(x = class, y = hwy) +
+  geom_point() +
+  ggtitle("Boxplots of class vs mileage (hwy) for US cars")
+```
+
+```{r}
+mpg %>%
+  ggplot() +
+  aes(x = class, y = hwy) +
+  geom_boxplot() +
+  ggtitle("Boxplots of class vs mileage (hwy) for US cars")
+```
+
+## Exercise 10
+
+Make a bar chart of `class` below. Use the cheat sheet and/or google. Hint: do not supply a `y` variable. 
+
+```{r}
+mpg %>%
+  ggplot() +
+  geom_bar(aes(x = class, fill = class))
+```
+
+## Exercise 11
+
+Fit the following model: `mod_e <- lm(log(income) ~ education, data = wages)`
+Examine the output. What does it look like? Use the `summary` function to look at the full output of the model. 
+```{r}
+mod_e <- lm(log(income) ~ education, data = wages)
+
+summary(mod_e)
+
+```
+
+## Exercise 12
+
+Use a pipe to model `log(income)` against `height`. Then use broom and dplyr to extract:
+
+1. The coefficient estimates and their related statistics. 
+
+2. The `adj.r.squared` and `p.value` for the overall model.
+
+```{r}
+mod_h <- wages %>%
+  lm(log(income) ~ height, data=.)
+
+mod_h %>%
+  tidy()
+
+mod_h %>%
+  glance() %>%
+  select(adj.r.squared, p.value)
+```
+
+## Exercise 13
+
+Model `log(income)` against `education` and `height` and `sex`. Can you interpret the coefficients?
+
+```{r}
+mod_ehs <- wages %>%
+  lm(log(income) ~ education + height + sex, data = .)
+
+mod_ehs %>%
+  tidy()
+```
+
+
